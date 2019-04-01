@@ -10,6 +10,8 @@ function generateTable() {
         return;
     }
     
+    document.body.removeChild(help); // person could use it correctly, no need to display help anymore.
+    
     mainDiv.setAttribute("style", "float: left");
         
     var table = sheet2Table(sheet);
@@ -45,6 +47,10 @@ mainDiv.setAttribute("class", "mainDiv");
 var title = document.createElement('h1');
 title.innerHTML = 'Paste the FMC raw content here';
 document.body.appendChild(title);
+
+var help = document.createElement('p');
+help.innerHTML = 'Click <a href="https://github.com/campos20/fmc-ranks/wiki">here</a> if you have doubts on how to use.'
+document.body.appendChild(help);
 
 var formGroup = document.createElement('div');
 
