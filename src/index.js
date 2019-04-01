@@ -10,7 +10,7 @@ function generateTable() {
         return;
     }
     
-    document.body.removeChild(help); // person could use it correctly, no need to display help anymore.
+    help.setAttribute("style", "display: none"); // hide help, user got 1 right
     
     mainDiv.setAttribute("style", "float: left");
         
