@@ -1,0 +1,37 @@
+body {
+    text-align: center;
+}
+
+td, tr, th {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+thead {
+    background-color: rgb(220, 220, 220);
+}
+
+table {
+    border: 2px solid black;
+}
+
+.woaj1 {
+    background-color: rgb(255, 255, 0);
+}
+
+.woaj2 {
+    background-color: rgb(255, 50, 50);
+}
+
+.woaj3 {
+    background-color: rgb(125, 125, 255);
+}
+
+.woaj1, .woaj2, .woaj3 {
+    font-weight: bold;
+}
+
+.tableDiv {
+    display: inline-block;
+}
