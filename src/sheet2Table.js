@@ -13,6 +13,8 @@ export function sheet2Table(sheet) {
     }
     header.appendChild(trHeader);
     table.appendChild(header);
+
+    var maxWidth = 0;
     
     for (var i=0; i<sheet["names"].length; i++) {
         var tr = document.createElement('tr');        

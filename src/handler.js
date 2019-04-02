@@ -2,8 +2,9 @@ import {avg, single} from './utils.js';
 
 export function parser(text) {
 
+    const wcaMax = 80;
+
     var names = [];
-    var results = [];
     var avgs = [];
     var singles = [];
     var pos = [];
@@ -19,9 +20,32 @@ export function parser(text) {
             line = line.slice(0, indexEqual).trim();
             var temp = line.split(/[ ,=]+/);
             
-            var r3 = temp.pop().toUpperCase();
+            var r3 = temp.pop();
             var r2 = temp.pop().toUpperCase();
             var r1 = temp.pop().toUpperCase();
+
+            // make strange things as DNF, set < wxaMax or < 1 to DNF
+            if (isNaN(r1)) {
+                if (r1 !== "DNF" && r1 !== "DNS") r1 = "DNF";
+            }
+            else {
+                r1 = Number(r1);
+                if (r1 > wcaMax || r1 < 1) r1 = "DNF";
+            }
+            if (isNaN(r2)) {
+                if (r2 !== "DNF" && r2 !== "DNS") r2 = "DNF";
+            }
+            else {
+                r2 = Number(r2);
+                if (r2 > wcaMax || r2 < 1) r2 = "DNF";
+            }
+            if (isNaN(r3)) {
+                if (r3 !== "DNF" && r3 !== "DNS") r3 = "DNF";
+            }
+            else {
+                r3 = Number(r3);
+                if (r3 > wcaMax || r3 < 1) r3 = "DNF";
+            }
             
             var name = temp.join(" ");
             var attempts = [r1, r2, r3];
@@ -41,7 +65,6 @@ export function parser(text) {
             R1.splice(index, 0, r1);
             R2.splice(index, 0, r2);
             R3.splice(index, 0, r3);
-            results.splice(index, 0, attempts);
             avgs.splice(index, 0, average);
             singles.splice(index, 0, best);
         }
