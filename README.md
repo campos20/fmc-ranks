@@ -4,6 +4,6 @@ Small program to optimize creation of images from a raw text containing Fewest M
 ## Getting started
 
 - This is a web version of [Guido Dipietro's tool](https://github.com/GuidoDipietro/FMCranks).
-- Download this repo and open the `index.html` page using Firefox (Chrome gives trouble because of the `import` JavaScript feature).
+- Download this repo and open the `index.html` page using Firefox (Chrome gives trouble because of the `import` JavaScript feature). This restriction is for local testing only, on the [page](https://campos20.github.io/fmc-ranks/), Chrome accepts it.
 - Paste the raw copy from the results (names, attempts...) and click `Generate table`. View [wiki](https://github.com/campos20/fmc-ranks/wiki) for a little more.
 - After the table is generated, click in `Donwload image` to save the image in your device.

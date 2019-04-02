@@ -19,9 +19,9 @@ export function parser(text) {
             line = line.slice(0, indexEqual).trim();
             var temp = line.split(/[ ,=]+/);
             
-            var r3 = temp.pop();
-            var r2 = temp.pop();
-            var r1 = temp.pop();
+            var r3 = temp.pop().toUpperCase();
+            var r2 = temp.pop().toUpperCase();
+            var r1 = temp.pop().toUpperCase();
             
             var name = temp.join(" ");
             var attempts = [r1, r2, r3];
