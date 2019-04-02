@@ -25,9 +25,8 @@ export function sheet2Table(sheet) {
         var mean = (sheet["avgs"][i]).toFixed(2);
         
         var tdPos = document.createElement('th');
-        if (pos < 4){
-            tdPos.setAttribute("class", "woaj"+pos);
-        }
+        tdPos.classList.add("position");
+
         if (i>0 && sheet["pos"][i] === sheet["pos"][i-1]){
             pos = "-";
         }
@@ -43,7 +42,15 @@ export function sheet2Table(sheet) {
         tr.appendChild(tdR1);
         var index = sheet["R1Ordered"].indexOf(r1);
         if (index < 3) {
-            tdR1.setAttribute("class", "woaj"+(index+1));
+            tdR1.classList.add("woaj"+(index+1));
+        }
+        if (isNaN(r1)) {
+            if (r1.toUpperCase() === "DNF") {
+                tdR1.classList.add("DNF");
+            }
+            if (r1.toUpperCase() === "DNS") {
+                tdR1.classList.add("DNS");
+            }
         }
         
         var tdR2 = document.createElement('td');
@@ -51,7 +58,15 @@ export function sheet2Table(sheet) {
         tr.appendChild(tdR2);
         index = sheet["R2Ordered"].indexOf(r2);
         if (index < 3) {
-            tdR2.setAttribute("class", "woaj"+(index+1));
+            tdR2.classList.add("woaj"+(index+1));
+        }
+        if (isNaN(r2)) {
+            if (r2.toUpperCase() === "DNF") {
+                tdR2.classList.add("DNF");
+            }
+            if (r2.toUpperCase() === "DNS") {
+                tdR2.classList.add("DNS");
+            }
         }
 
         var tdR3 = document.createElement('td');
@@ -60,6 +75,14 @@ export function sheet2Table(sheet) {
         index = sheet["R3Ordered"].indexOf(r3);
         if (index < 3) {
             tdR3.setAttribute("class", "woaj"+(index+1));
+        }
+        if (isNaN(r3)) {
+            if (r3.toUpperCase() === "DNF") {
+                tdR3.classList.add("DNF");
+            }
+            if (r3.toUpperCase() === "DNS") {
+                tdR3.classList.add("DNS");
+            }
         }
         
         var tdMean = document.createElement('td');
@@ -75,21 +98,17 @@ export function sheet2Table(sheet) {
     
     var woaj1 = document.createElement('td');
     woaj1.innerHTML = sheet["woaj1"];
-    woaj1.setAttribute("class", "woaj1");
     var woaj2 = document.createElement('td');
     woaj2.innerHTML = sheet["woaj2"];
-    woaj2.setAttribute("class", "woaj1");
     var woaj3 = document.createElement('td');
     woaj3.innerHTML = sheet["woaj3"];
-    woaj3.setAttribute("class", "woaj1");
     var woajMean = document.createElement('td');
     woajMean.innerHTML = sheet["woajMean"];
-    woajMean.setAttribute("class", "woaj1");
     
     trFoot.appendChild(document.createElement('td'));
     
     var tdWoaj = document.createElement('td');
-    tdWoaj.innerHTML = "woaj"
+    tdWoaj.innerHTML = "Woaj"
     trFoot.appendChild(tdWoaj);
 
     trFoot.appendChild(woaj1);
@@ -97,7 +116,8 @@ export function sheet2Table(sheet) {
     trFoot.appendChild(woaj3);
     trFoot.appendChild(woajMean);
     
-    table.appendChild(trFoot);
+    tfoot.appendChild(trFoot);
+    table.appendChild(tfoot);
     
     return table;
 }

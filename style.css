@@ -9,23 +9,28 @@ td, tr, th {
 }
 
 thead {
-    background-color: rgb(220, 220, 220);
+    color: white;
+    background-color: rgb(110, 110, 110);
 }
 
-table {
+table, th {
     border: 2px solid black;
 }
 
-.woaj1 {
-    background-color: rgb(255, 255, 0);
+.position {
+    background-color: rgb(57, 181, 90);
+}
+
+.woaj1, tfoot {
+    background-color: rgb(255, 204, 0);
 }
 
 .woaj2 {
-    background-color: rgb(255, 50, 50);
+    background-color: rgb(180, 180, 180);
 }
 
 .woaj3 {
-    background-color: rgb(125, 125, 255);
+    background-color: rgb(230, 77, 0);
 }
 
 .woaj1, .woaj2, .woaj3 {
@@ -34,4 +39,12 @@ table {
 
 .tableDiv {
     display: inline-block;
+}
+
+.DNF {
+    background-color: rgb(230, 0, 0);
+}
+
+.DNS {
+    background-color: rgb(0, 138, 230);
 }
