@@ -15,9 +15,21 @@ function generateTable() {
     mainDiv.setAttribute("style", "float: left");
         
     var table = sheet2Table(sheet);
+    table.id = "table";
     
     tableDiv.innerHTML = "";
     tableDiv.appendChild(table);
+
+    // fixed width for the results
+    var width = $('#table tr td:nth-child(3)').width();
+    var width2 = $('#table tr td:nth-child(4)').width();
+    var width3 = $('#table tr td:nth-child(5)').width();
+
+    var resultWidth = Math.max(width, width2, width3);
+
+    $('#table tr td:nth-child(3)').width(resultWidth);
+    $('#table tr td:nth-child(4)').width(resultWidth);
+    $('#table tr td:nth-child(5)').width(resultWidth);
     
     downloadButton.disabled = false;
 }

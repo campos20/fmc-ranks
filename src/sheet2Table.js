@@ -1,6 +1,10 @@
 export function sheet2Table(sheet) {
 
     var table = document.createElement('table');
+
+    var colgroup = document.createElement('colgroup');
+    colgroup.innerHTML = "<col><col><col><col><col><col>"
+    table.appendChild(colgroup);
     
     var header = document.createElement('thead');
     var headerContent = ["Pos", "Name", "R1", "R2", "R3", "Mean"];
