@@ -1,4 +1,4 @@
-import {avg, single} from './utils.js';
+import {avg, single, isValidLine, getThreeConsecutiveValids, getName} from './utils.js';
 
 export function parser(text) {
 
@@ -15,12 +15,10 @@ export function parser(text) {
     var array = text.split("\n");
     for (var i=0; i<array.length; i++) {
         var line = array[i];
-        var indexEqual = line.indexOf("=");
-        if (indexEqual > 0){
-            line = line.slice(0, indexEqual).trim();
-            var temp = line.split(/[ ,=]+/);
+        if (isValidLine(line)){
+            var temp = getThreeConsecutiveValids(line);
             
-            var r3 = temp.pop();
+            var r3 = temp.pop().toUpperCase();
             var r2 = temp.pop().toUpperCase();
             var r1 = temp.pop().toUpperCase();
 
@@ -47,7 +45,7 @@ export function parser(text) {
                 if (r3 > wcaMax || r3 < 1) r3 = "DNF";
             }
             
-            var name = temp.join(" ");
+            var name = getName(line);
             var attempts = [r1, r2, r3];
             var average = avg(attempts);
             var best = single(attempts);

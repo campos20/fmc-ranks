@@ -1,5 +1,6 @@
 import {parser} from './handler.js';
 import {sheet2Table} from './sheet2Table.js';
+import {isValidLine} from './utils.js'
 
 function generateTable() {
     var text = textArea.value;
@@ -53,6 +54,26 @@ function clearImage() {
     mainDiv.setAttribute("style", "float: none");
 }
 
+function isValidResult(result) {
+    // We accept as valid any number
+    if (!isNaN(result) && parseInt(result, 10) > 0) return true;
+    if (result.toUpperCase === "DNF") return true;
+    if (result.toUpperCase === "DNS") return true;
+    return false;
+}
+
+function clearData() {
+    var array = [];
+    var textArray =  textArea.value.split("\n");
+    for (var i=0; i<textArray.length; i++) {
+        var line = textArray[i];
+        if (isValidLine(line)) {
+            array.push(line);
+        }
+    }
+    textArea.value = array.join("\n");
+}
+
 var mainDiv = document.createElement('div');
 mainDiv.setAttribute("class", "mainDiv");
 
@@ -78,6 +99,11 @@ mainDiv.appendChild(formGroup);
 
 var buttonDiv = document.createElement('div');
 
+var clearDataButton = document.createElement('button');
+clearDataButton.innerHTML = 'Clear data';
+clearDataButton.onclick = clearData;
+clearDataButton.setAttribute("title", "Data preview. You can get a cleaner data view and it's easier to perform changes.");
+
 var generateButton = document.createElement('button');
 generateButton.innerHTML = 'Generate table';
 generateButton.onclick = generateTable;
@@ -87,6 +113,7 @@ downloadButton.innerHTML = 'Download image';
 downloadButton.disabled = true;
 downloadButton.onclick = downloadImage;
 
+buttonDiv.appendChild(clearDataButton);
 buttonDiv.appendChild(generateButton);
 buttonDiv.appendChild(downloadButton);
 mainDiv.appendChild(buttonDiv);
