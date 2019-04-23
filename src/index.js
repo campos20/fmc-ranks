@@ -1,6 +1,6 @@
 import {parser} from './handler.js';
 import {sheet2Table} from './sheet2Table.js';
-import {isValidLine} from './utils.js'
+import {isValidLine, isValidResult} from './utils.js'
 
 function generateTable() {
     var text = textArea.value;
@@ -52,14 +52,6 @@ function clearImage() {
     tableDiv.innerHTML = "";
     downloadButton.disabled = true;
     mainDiv.setAttribute("style", "float: none");
-}
-
-function isValidResult(result) {
-    // We accept as valid any number
-    if (!isNaN(result) && parseInt(result, 10) > 0) return true;
-    if (result.toUpperCase === "DNF") return true;
-    if (result.toUpperCase === "DNS") return true;
-    return false;
 }
 
 function clearData() {
