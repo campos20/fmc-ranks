@@ -1,126 +1,131 @@
-export function sheet2Table(sheet) {
+import {outputFormat, numberOfColumnsByGroup} from './utils.js'
+
+export function sheet2Table(sheet, columns) {
+
+    const defaultLines = 15;
+
+    var numberOfCompetitors = sheet["names"].length;
+
+    if (columns < 1 || columns > numberOfCompetitors/defaultLines) {
+        columns = Math.ceil(numberOfCompetitors/defaultLines);
+    }
 
     var table = document.createElement('table');
-
-    var colgroup = document.createElement('colgroup');
-    colgroup.innerHTML = "<col><col><col><col><col><col>"
-    table.appendChild(colgroup);
     
-    var header = document.createElement('thead');
+    // Header
+    var thead = document.createElement('thead');
     var headerContent = ["Pos", "Name", "R1", "R2", "R3", "Mean"];
+    var classes = ["Position", "Name", "Result", "Result", "Result", "Mean"];
     
     var trHeader = document.createElement('tr');
-    for (var i=0; i<headerContent.length; i++) {
-        var th = document.createElement('th');
-        th.innerHTML = headerContent[i];
-        trHeader.appendChild(th);
+    for (var j=0; j<columns; j++) {
+        for (var i=0; i<headerContent.length; i++) {
+            var th = document.createElement('th');
+            th.innerHTML = headerContent[i];
+            th.classList.add(classes[i]);
+            trHeader.appendChild(th);
+        }
     }
-    header.appendChild(trHeader);
-    table.appendChild(header);
+    thead.appendChild(trHeader);
+    table.appendChild(thead);
 
-    var maxWidth = 0;
+    // Table body
+    var numberOfLines = Math.ceil(sheet["names"].length/columns);
+    var tableArray = [];
+    for (var i=0; i<numberOfLines; i++){
+        var tr = document.createElement('tr');
+        tableArray.push(tr);
+    }
     
-    for (var i=0; i<sheet["names"].length; i++) {
-        var tr = document.createElement('tr');        
+    for (var i=0; i<numberOfCompetitors; i++) {
+        var line = i%numberOfLines;
 
+        // Positions
+        var td = document.createElement('td');
+        td.classList.add("position");
         var pos = sheet["pos"][i];
-        var name = sheet["names"][i];
-        var r1 = sheet["R1"][i];
-        var r2 = sheet["R2"][i];
-        var r3 = sheet["R3"][i];
-        var mean = (sheet["avgs"][i]).toFixed(2);
-        
-        var tdPos = document.createElement('th');
-        tdPos.classList.add("position");
+        if (i>0 && pos === sheet["pos"][i-1]){
+            td.innerHTML = "-";
+        }
+        else {
+            td.innerHTML = sheet["pos"][i]
+        }
+        tableArray[line].appendChild(td);
 
-        if (i>0 && sheet["pos"][i] === sheet["pos"][i-1]){
-            pos = "-";
-        }
-        tdPos.innerHTML = pos;
-        tr.appendChild(tdPos);
-        
-        var tdName = document.createElement('td');        
-        tdName.innerHTML = name;
-        tr.appendChild(tdName);
-        
-        var tdR1 = document.createElement('td');
-        tdR1.innerHTML = r1;
-        tr.appendChild(tdR1);
-        var index = sheet["R1Ordered"].indexOf(r1);
-        if (index < 3) {
-            tdR1.classList.add("woaj"+(index+1));
-        }
-        if (isNaN(r1)) {
-            if (r1.toUpperCase() === "DNF") {
-                tdR1.classList.add("DNF");
+        // Names 
+        td = document.createElement('td');
+        td.innerHTML = sheet["names"][i];
+        tableArray[line].appendChild(td);
+
+        // Results
+        for (var j=1; j<4; j++) {
+            var result = sheet["R"+j][i];
+            td = document.createElement('td');
+            td.innerHTML = result;
+            tableArray[line].appendChild(td);
+
+            // Format result
+            var index = sheet["R"+j+"Ordered"].indexOf(result);
+            if (index < 3) {
+                td.classList.add("woaj"+(index+1));
             }
-            if (r1.toUpperCase() === "DNS") {
-                tdR1.classList.add("DNS");
-            }
-        }
-        
-        var tdR2 = document.createElement('td');
-        tdR2.innerHTML = r2;
-        tr.appendChild(tdR2);
-        index = sheet["R2Ordered"].indexOf(r2);
-        if (index < 3) {
-            tdR2.classList.add("woaj"+(index+1));
-        }
-        if (isNaN(r2)) {
-            if (r2.toUpperCase() === "DNF") {
-                tdR2.classList.add("DNF");
-            }
-            if (r2.toUpperCase() === "DNS") {
-                tdR2.classList.add("DNS");
+            if (isNaN(result)) {
+                if (result.toUpperCase() === "DNF"){
+                    td.classList.add("DNF");
+                }
+                else if (result.toUpperCase() === "DNS"){
+                    td.classList.add("DNS");
+                }
             }
         }
 
-        var tdR3 = document.createElement('td');
-        tdR3.innerHTML = r3;
-        tr.appendChild(tdR3);
-        index = sheet["R3Ordered"].indexOf(r3);
-        if (index < 3) {
-            tdR3.setAttribute("class", "woaj"+(index+1));
+        // Mean
+        var mean = sheet["avgs"][i];
+        td = document.createElement('td');
+        td.innerHTML = outputFormat(mean);
+        tableArray[line].appendChild(td);
+        if (pos <= 3) {
+            td.classList.add("woaj"+pos);
         }
-        if (isNaN(r3)) {
-            if (r3.toUpperCase() === "DNF") {
-                tdR3.classList.add("DNF");
-            }
-            if (r3.toUpperCase() === "DNS") {
-                tdR3.classList.add("DNS");
-            }
-        }
-        
-        var tdMean = document.createElement('td');
-        tdMean.innerHTML = mean;
-        if (!isFinite(mean)) tdMean.innerHTML = "DNF";
-        tr.appendChild(tdMean);
-
-        table.appendChild(tr);
     }
+
+    // Fill the table with empty squares if needed
+    for (var i=numberOfCompetitors; i<columns*numberOfLines; i++){
+        for (var j=0; j<numberOfColumnsByGroup; j++){
+            tableArray[i%numberOfLines].appendChild(document.createElement('td'));
+        }
+    }
+
+    var tbody = document.createElement('tbody');    
+    for (var i=0; i<tableArray.length; i++) {
+        tbody.appendChild(tableArray[i]);
+    }
+    table.appendChild(tbody);
     
     var tfoot = document.createElement('tfoot');
     var trFoot = document.createElement('tr');
     
-    var woaj1 = document.createElement('td');
-    woaj1.innerHTML = sheet["woaj1"];
-    var woaj2 = document.createElement('td');
-    woaj2.innerHTML = sheet["woaj2"];
-    var woaj3 = document.createElement('td');
-    woaj3.innerHTML = sheet["woaj3"];
-    var woajMean = document.createElement('td');
-    woajMean.innerHTML = sheet["woajMean"];
-    
-    trFoot.appendChild(document.createElement('td'));
-    
-    var tdWoaj = document.createElement('td');
-    tdWoaj.innerHTML = "Woaj"
-    trFoot.appendChild(tdWoaj);
+    for (var i=0; i<columns; i++) {
+        trFoot.appendChild(document.createElement('td'));
 
-    trFoot.appendChild(woaj1);
-    trFoot.appendChild(woaj2);
-    trFoot.appendChild(woaj3);
-    trFoot.appendChild(woajMean);
+        var woaj1 = document.createElement('td');
+        woaj1.innerHTML = sheet["woaj1"];
+        var woaj2 = document.createElement('td');
+        woaj2.innerHTML = sheet["woaj2"];
+        var woaj3 = document.createElement('td');
+        woaj3.innerHTML = sheet["woaj3"];
+        var woajMean = document.createElement('td');
+        woajMean.innerHTML = sheet["woajMean"];
+        
+        var tdWoaj = document.createElement('td');
+        tdWoaj.innerHTML = "Woaj"
+        trFoot.appendChild(tdWoaj);
+
+        trFoot.appendChild(woaj1);
+        trFoot.appendChild(woaj2);
+        trFoot.appendChild(woaj3);
+        trFoot.appendChild(woajMean);
+    }
     
     tfoot.appendChild(trFoot);
     table.appendChild(tfoot);

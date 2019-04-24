@@ -1,6 +1,6 @@
 import {parser} from './handler.js';
 import {sheet2Table} from './sheet2Table.js';
-import {isValidLine, isValidResult} from './utils.js'
+import {isValidLine, isValidResult, numberOfColumnsByGroup, classes} from './utils.js'
 
 function generateTable() {
     var text = textArea.value;
@@ -11,28 +11,33 @@ function generateTable() {
         return;
     }
     
-    help.setAttribute("style", "display: none"); // hide help, user got 1 right
-    
-    mainDiv.setAttribute("style", "float: left");
-        
-    var table = sheet2Table(sheet);
+    var columns = columnInput.value; // This is actually the number of group columns (pos, name, results, mean count as 1 column)
+    var table = sheet2Table(sheet, columns);
     table.id = "table";
     
     tableDiv.innerHTML = "";
     tableDiv.appendChild(table);
 
-    // fixed width for the results
-    var width = $('#table tr td:nth-child(3)').width();
-    var width2 = $('#table tr td:nth-child(4)').width();
-    var width3 = $('#table tr td:nth-child(5)').width();
+    columns = table.rows[0].cells.length/6; // Table might change column numbers
+    columnInput.value = columns; // Update value on the input
 
-    var resultWidth = Math.max(width, width2, width3);
-
-    $('#table tr td:nth-child(3)').width(resultWidth);
-    $('#table tr td:nth-child(4)').width(resultWidth);
-    $('#table tr td:nth-child(5)').width(resultWidth);
-    
+    help.setAttribute("style", "display: none"); // hide help, user got 1 right
+    mainDiv.setAttribute("style", "float: left");
     downloadButton.disabled = false;
+
+    buildTableControl(table);
+
+    // Fix name widths, considering classes
+    for (var i=0; i < classes.length; i++){
+        var maxWidth = 0;
+        $('.'+classes[i]).each(function(){
+            var width = $(this).width();
+            maxWidth = Math.max(maxWidth, width);
+        });
+        $('.'+classes[i]).each(function(){
+            $(this).width(maxWidth);
+        });
+    }
 }
 
 function downloadImage() {
@@ -50,8 +55,8 @@ function downloadImage() {
 
 function clearImage() {
     tableDiv.innerHTML = "";
+    tableControlDiv.innerHTML = "";
     downloadButton.disabled = true;
-    mainDiv.setAttribute("style", "float: none");
 }
 
 function clearData() {
@@ -64,6 +69,12 @@ function clearData() {
         }
     }
     textArea.value = array.join("\n");
+}
+
+function buildTableControl(vale){
+
+    tableControlDiv.innerHTML = "";
+    tableControlDiv.appendChild(columnsDiv);
 }
 
 var mainDiv = document.createElement('div');
@@ -109,6 +120,25 @@ buttonDiv.appendChild(clearDataButton);
 buttonDiv.appendChild(generateButton);
 buttonDiv.appendChild(downloadButton);
 mainDiv.appendChild(buttonDiv);
+
+// Table control
+var tableControlDiv = document.createElement('div');
+
+// Appended after the image is generated
+var columnsDiv = document.createElement('div');
+columnsDiv.innerHTML = ("Columns: ");
+
+var columnInput = document.createElement('input');
+columnInput.setAttribute("type", "number");
+columnInput.setAttribute("min", "1");
+columnInput.setAttribute("max", "10");
+columnInput.setAttribute("step", "1");
+columnInput.setAttribute("value", "0"); // Table generation handle 0 as default number of lines for each column.
+columnInput.setAttribute("size", "3");
+columnInput.addEventListener("change", generateTable);
+columnsDiv.appendChild(columnInput);
+
+mainDiv.appendChild(tableControlDiv);
 
 document.body.appendChild(mainDiv);
 

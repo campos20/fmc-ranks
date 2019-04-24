@@ -66,3 +66,23 @@ export function getName(validLine) {
     }
     return out.join(" ");
 }
+
+export function outputFormat(result) {
+    if (!isNaN(result)){
+        if (isFinite(result)) {
+            return result.toFixed(2);
+        }
+        else {
+            return "DNF";
+        }
+    }
+    if (result.toUpperCase() == "DNF"){
+        return "DNF";
+    }
+        if (result.toUpperCase() == "DNS"){
+        return "DNS";
+    }
+}
+
+export const classes = ["Position", "Name", "Result", "Result", "Result", "Mean"];
+export const numberOfColumnsByGroup = classes.length;
