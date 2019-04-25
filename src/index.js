@@ -12,7 +12,8 @@ function generateTable() {
     }
     
     var columns = columnInput.value; // This is actually the number of group columns (pos, name, results, mean count as 1 column)
-    var table = sheet2Table(sheet, columns);
+    var completeTable = sheet2Table(sheet, columns);
+    var table = completeTable["table"];
     table.id = "table";
     
     tableDiv.innerHTML = "";
@@ -20,6 +21,10 @@ function generateTable() {
 
     columns = table.rows[0].cells.length/6; // Table might change column numbers
     columnInput.value = columns; // Update value on the input
+
+    var woajTable = completeTable["woaj"];
+    woajTable.id = "woajTable";
+    tableDiv.appendChild(woajTable);
 
     help.setAttribute("style", "display: none"); // hide help, user got 1 right
     mainDiv.setAttribute("style", "float: left");
@@ -38,6 +43,11 @@ function generateTable() {
             $(this).width(maxWidth);
         });
     }
+
+    // Fix woaj widths
+    var tableWidth = $('#table').width();
+    $('#woajTable').width(tableWidth);
+
 }
 
 function downloadImage() {
