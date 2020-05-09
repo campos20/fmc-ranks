@@ -20,7 +20,7 @@ class Rank extends Component {
 
     return (
       <table class="table table-condensed table-bordered">
-        <thead>
+        <thead className="bg-secondary text-white">
           <tr>
             <th>Pos</th>
             <th>Name</th>
@@ -36,7 +36,11 @@ class Rank extends Component {
           {data.map((result, i) => {
             return (
               <tr key={i}>
-                <th>{i + 1}</th>
+                <th>
+                  {i === 0 || compareResults(data[i], data[i - 1]) !== 0
+                    ? i + 1
+                    : "-"}
+                </th>
                 <td>{result.name}</td>
                 {result.results.map((r, j) => (
                   <td key={j}>{r}</td>
@@ -48,7 +52,9 @@ class Rank extends Component {
         </tbody>
         <tfoot>
           <tr>
+            <th />
             <th>Woaj</th>
+            <th></th>
           </tr>
         </tfoot>
       </table>
