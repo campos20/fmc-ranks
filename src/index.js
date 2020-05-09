@@ -1,11 +1,6 @@
 import { parser } from "./handler.js";
 import { sheet2Table } from "./sheet2Table.js";
-import {
-  isValidLine,
-  isValidResult,
-  numberOfColumnsByGroup,
-  classes,
-} from "./utils.js";
+import { isValidLine, classes } from "./utils.js";
 
 function generateTable() {
   var text = textArea.value;
@@ -162,3 +157,37 @@ document.body.appendChild(mainDiv);
 var tableDiv = document.createElement("div");
 tableDiv.setAttribute("class", "tableDiv"); //this crops whitespace from the image. see css
 document.body.appendChild(tableDiv);
+
+// Scramble generation
+
+var scrambleTitle = document.createElement("h1");
+scrambleTitle.innerHTML = "Generate new scrambles";
+document.body.appendChild(scrambleTitle);
+
+var generateScrambleDiv = document.createElement("div");
+
+let generateScrambleForm = document.createElement("form");
+
+var inputScrambleNumber = document.createElement("input");
+inputScrambleNumber.setAttribute("type", "number");
+inputScrambleNumber.setAttribute("min", "1");
+inputScrambleNumber.setAttribute("placeholder", "Number of Scrambles");
+inputScrambleNumber.required = true;
+generateScrambleForm.appendChild(inputScrambleNumber);
+
+var generateScrambleButton = document.createElement("button");
+generateScrambleButton.innerHTML = "Generate new Scrambles";
+generateScrambleButton.onclick = generateNewScrambles;
+generateScrambleButton.type = "submit";
+generateScrambleForm.appendChild(generateScrambleButton);
+
+generateScrambleDiv.appendChild(generateScrambleForm);
+
+document.body.appendChild(generateScrambleDiv);
+
+function generateNewScrambles(event) {
+  event.preventDefault();
+  console.log(event);
+  let numberOfScrambles = inputScrambleNumber.value;
+  console.log(numberOfScrambles);
+}
