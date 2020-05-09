@@ -66,19 +66,25 @@ class GenerateScrambles extends Component {
           </div>
         </form>
 
-        <table className="table">
-          <tbody>
-            {!!this.state.scrambles &&
-              this.state.scrambles.map((scramble, i) => {
-                return (
-                  <tr key={i}>
-                    <td></td>
-                    <td>{`${i + 1}. ${scramble}`}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+        <div className="row">
+          <div className="col-12">
+            <table className="table">
+              <tbody>
+                {!!this.state.scrambles &&
+                  this.state.scrambles.map((scramble, i) => {
+                    return (
+                      <tr key={i}>
+                        <td>{`${i + 1}. ${scramble}`}</td>
+                        <td className="text-left">
+                          <scramble-display event="333fm" scramble={scramble} />
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }
