@@ -173,6 +173,7 @@ inputScrambleNumber.setAttribute("type", "number");
 inputScrambleNumber.setAttribute("min", "1");
 inputScrambleNumber.setAttribute("placeholder", "Number of Scrambles");
 inputScrambleNumber.required = true;
+inputScrambleNumber.value = 3; // Initial value for scrambles
 generateScrambleForm.appendChild(inputScrambleNumber);
 
 var generateScrambleButton = document.createElement("button");
@@ -183,11 +184,42 @@ generateScrambleForm.appendChild(generateScrambleButton);
 
 generateScrambleDiv.appendChild(generateScrambleForm);
 
+let scrambleDisplayDiv = document.createElement("div");
+generateScrambleDiv.appendChild(scrambleDisplayDiv);
+
 document.body.appendChild(generateScrambleDiv);
 
 function generateNewScrambles(event) {
   event.preventDefault();
-  console.log(event);
   let numberOfScrambles = inputScrambleNumber.value;
-  console.log(numberOfScrambles);
+
+  let url = new URL("https://scramble-web-api.herokuapp.com/scramble/333fm");
+  url.searchParams.append("numberOfScrambles", numberOfScrambles);
+
+  $.getJSON(url.href, function (data) {
+    let table = document.createElement("table");
+    let tbody = table.createTBody();
+
+    let scrambles = data.scrambles;
+    scrambles.forEach((scramble, i) => {
+      let tr = document.createElement("tr");
+
+      let scrambleImageTd = document.createElement("td");
+      let scrambleImage = document.createElement("scramble-display");
+      scrambleImage.setAttribute("scramble", scramble);
+      scrambleImageTd.appendChild(scrambleImage);
+      scrambleImageTd.setAttribute("style", "text-align: left;");
+      tr.appendChild(scrambleImageTd);
+
+      console.log(scrambleImage);
+
+      let tdScramble = document.createElement("td");
+      tdScramble.innerHTML = `${i + 1}. ${scramble}`;
+      tr.appendChild(tdScramble);
+      tbody.appendChild(tr);
+    });
+
+    scrambleDisplayDiv.innerHTML = "";
+    scrambleDisplayDiv.appendChild(table);
+  });
 }
