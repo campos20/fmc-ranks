@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
 import { getFmcScrambles } from "../api/scramble.web.api";
+import { ScrambleDisplay } from "scramble-display";
 
 class GenerateScrambles extends Component {
   state = {
@@ -15,6 +15,8 @@ class GenerateScrambles extends Component {
       "R' U' F D F' U R' D' L2 B2 U2 B' L F2 U D2 R2 B2 U' R2 U' L2 D' R' U' F",
     ],
     numberOfScrambles: 1,
+    loading: false,
+    error: "",
   };
 
   handleNumberOfScramblesChange = (e) => {
@@ -23,12 +25,26 @@ class GenerateScrambles extends Component {
 
   handleClick = (e) => {
     e.preventDefault();
+    this.setLoading(true);
     getFmcScrambles(this.state.numberOfScrambles)
       .then((response) => response.json())
       .then((data) =>
-        this.setState({ ...this.state, scrambles: data.scrambles })
+        this.setState({
+          ...this.state,
+          scrambles: data.scrambles,
+          loading: false,
+          error: "",
+        })
       )
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        this.setLoading(false);
+        this.setError("Error while generating scrambles.");
+      });
+  };
+
+  setLoading = (flag) => {
+    this.setState({ ...this.state, loading: flag });
   };
 
   render() {
@@ -54,7 +70,7 @@ class GenerateScrambles extends Component {
                 min={1}
               />
             </div>
-            <div className="btn-group" role="group">
+            <div className="btn-group m-2" role="group">
               <button
                 type="submit"
                 className="btn btn-group btn-primary"
@@ -66,6 +82,26 @@ class GenerateScrambles extends Component {
           </div>
         </form>
 
+        {this.state.loading && (
+          <div className="row m-3">
+            <div className="col-12">
+              <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!!this.state.error && (
+          <div className="row m-3">
+            <div className="col-12">
+              <div className="bg-danger text-white">
+                <span>{this.state.error}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="row">
           <div className="col-12">
             <table className="table">
@@ -74,7 +110,9 @@ class GenerateScrambles extends Component {
                   this.state.scrambles.map((scramble, i) => {
                     return (
                       <tr key={i}>
-                        <td>{`${i + 1}. ${scramble}`}</td>
+                        <td className="align-middle">{`${
+                          i + 1
+                        }. ${scramble}`}</td>
                         <td className="text-left">
                           <scramble-display event="333fm" scramble={scramble} />
                         </td>
