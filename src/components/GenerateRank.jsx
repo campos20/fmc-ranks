@@ -5,6 +5,7 @@ import Rank from "./Rank";
 class GenerateRank extends Component {
   state = {
     attempts: 3,
+    columns: 1,
     content: `Teh Keng Foo 24, 20, 25 = 23.00
   Oculte ou denuncie isso
   Curtir
@@ -126,6 +127,10 @@ class GenerateRank extends Component {
     this.setState({ ...this.state, content: "" });
   };
 
+  handleColumnsChange = (e) => {
+    this.setState({ ...this.state, columns: e.target.value });
+  };
+
   render() {
     return (
       <div className="container">
@@ -160,7 +165,18 @@ class GenerateRank extends Component {
                   className="form-control"
                   required
                   value={this.state.attempts}
-                  onChange={(e) => this.handleAttemptsChange(e)}
+                  onChange={this.handleAttemptsChange}
+                  min={1}
+                />
+                <div className="input-group-prepend">
+                  <span className="input-group-text">Columns</span>
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  required
+                  value={this.state.columns}
+                  onChange={this.handleColumnsChange}
                   min={1}
                 />
               </div>
@@ -191,7 +207,7 @@ class GenerateRank extends Component {
           </div>
         </form>
         <div className="row justify-content-center">
-          <div class="col-12">
+          <div className="col-12">
             <Rank attempts={this.state.attempts} data={this.state.data || []} />
           </div>
         </div>
