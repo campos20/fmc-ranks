@@ -5,7 +5,18 @@ import GenerateScrambles from "./components/GenerateScrambles";
 function App() {
   return (
     <div className="App">
-      <GenerateScrambles />
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <h1>FMC Ranks</h1>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12">
+            <GenerateScrambles />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
