@@ -116,7 +116,10 @@ class GenerateRank extends Component {
 
   handleGenerate = (e) => {
     e.preventDefault();
-    console.log("Generate rank");
+    this.handleShrinkData();
+
+    // Split the content into lines to generate
+    this.setState({ ...this.state, data: this.state.content.split("\n") });
   };
 
   handleReset = () => {
@@ -187,8 +190,10 @@ class GenerateRank extends Component {
             </div>
           </div>
         </form>
-        <div className="row">
-          <Rank attempts={this.state.attempts} />
+        <div className="row justify-content-center">
+          <div class="col-12">
+            <Rank attempts={this.state.attempts} data={this.state.data || []} />
+          </div>
         </div>
       </div>
     );

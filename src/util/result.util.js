@@ -30,7 +30,7 @@ export function isValidResult(result) {
 export function getName(validLine) {
   var out = [];
   var array = validLine.split(/[ ,=]+/);
-  array.forEath((part) => {
+  array.forEach((part) => {
     if (!isValidResult(part)) {
       out.push(part);
     } else {
