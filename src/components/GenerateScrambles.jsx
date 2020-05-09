@@ -4,17 +4,8 @@ import { ScrambleDisplay } from "scramble-display";
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [
-      "R' U' F L2 B2 L2 B' U2 F U2 F2 U2 L2 D2 F D' L R' F2 D F2 R' U2 R' U' F",
-      "R' U' F U2 F2 U2 F2 U B2 L2 D' B' D' F U F' D2 R' U L U B' R' U' F",
-      "R' U' F R2 B D' R2 B U' D2 R' F2 R B2 R L U2 D2 B2 L' B L D' R' U' F",
-      "R' U' F D2 L2 U2 F2 D B2 U' B' R2 F2 D L D R U2 B' D2 F' R' U' F",
-      "R' U' F D2 F' U' L' D L U2 B U B2 D' R2 U L2 D L2 F2 R2 L' B' R' U' F",
-      "R' U' F U R' D2 U2 F2 U2 B R2 F2 D2 L' B' D' L2 R D2 L' D B' R' U' F",
-      "R' U' F R2 F2 L2 D2 L2 U B R U' R2 F2 U2 F2 L D2 L D2 B D' R' U' F",
-      "R' U' F D F' U R' D' L2 B2 U2 B' L F2 U D2 R2 B2 U' R2 U' L2 D' R' U' F",
-    ],
-    numberOfScrambles: 1,
+    scrambles: [],
+    numberOfScrambles: 3,
     loading: false,
     error: "",
   };
@@ -76,7 +67,7 @@ class GenerateScrambles extends Component {
                 className="btn btn-group btn-primary"
                 onClick={this.handleClick}
               >
-                Generate
+                Generate Scrambles
               </button>
             </div>
           </div>

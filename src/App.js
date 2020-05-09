@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import GenerateScrambles from "./components/GenerateScrambles";
+import GenerateRank from "./components/GenerateRank";
 
 function App() {
   return (
@@ -11,6 +12,13 @@ function App() {
             <h1>FMC Ranks</h1>
           </div>
         </div>
+        <br />
+        <div className="row">
+          <div className="col-12">
+            <GenerateRank />
+          </div>
+        </div>
+        <br />
         <div className="row">
           <div className="col-12">
             <GenerateScrambles />
