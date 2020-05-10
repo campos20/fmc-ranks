@@ -12,6 +12,7 @@ class GenerateScrambles extends Component {
     numberOfScrambles: 3,
     loading: false,
     error: "",
+    image3d: false,
   };
 
   handleNumberOfScramblesChange = (e) => {
@@ -40,6 +41,10 @@ class GenerateScrambles extends Component {
 
   setLoading = (flag) => {
     this.setState({ ...this.state, loading: flag });
+  };
+
+  handleImage3d = () => {
+    this.setState({ ...this.state, image3d: !this.state.image3d });
   };
 
   render() {
@@ -77,6 +82,21 @@ class GenerateScrambles extends Component {
           </div>
         </form>
 
+        <div className="row">
+          <div className="form-check col-12 text-right">
+            <input
+              type="checkbox"
+              className="form-check-input"
+              value={this.state.image3d}
+              onClick={this.handleImage3d}
+              id="image3dcheck"
+            />
+            <label className="form-check-label" htmlFor="image3dcheck">
+              3D image
+            </label>
+          </div>
+        </div>
+
         {this.state.loading && (
           <div className="row m-3">
             <div className="col-12">
@@ -109,7 +129,11 @@ class GenerateScrambles extends Component {
                           i + 1
                         }. ${scramble}`}</td>
                         <td className="text-left">
-                          <scramble-display event="333fm" scramble={scramble} />
+                          <scramble-display
+                            event="333"
+                            scramble={scramble}
+                            visualization={this.state.image3d ? "3D" : "2D"}
+                          />
                         </td>
                       </tr>
                     );
