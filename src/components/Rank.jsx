@@ -14,6 +14,10 @@ const woajStyle = [
   { fontWeight: "bold", backgroundColor: "rgb(230, 77, 0)" },
 ];
 
+const positionStyle = {
+  backgroundColor: "rgb(57, 181, 90)",
+};
+
 class Rank extends Component {
   render() {
     // Clear results and sort by avg then single
@@ -45,73 +49,82 @@ class Rank extends Component {
 
     let numberOfLines = Math.ceil(data.length / this.props.columns);
 
+    let tfoot = (
+      <tfoot>
+        <tr>
+          {this.props.columns === 1 && <th />}
+          <th>Woaj</th>
+          {woajs.map((r, i) => (
+            <th key={i} style={woajStyle[0]}>
+              {r}
+            </th>
+          ))}
+          <th style={woajStyle[0]}>{outputFormat(woajMean)}</th>
+        </tr>
+      </tfoot>
+    );
+
+    let tableClass = "table table-condensed table-bordered m-0 p-0";
+
     return (
-      <table className="table table-condensed table-bordered">
-        <thead className="bg-secondary text-white">
-          <tr>
-            {Array.from({ length: this.props.columns }).map((_, k) => {
-              return (
-                <React.Fragment key={k}>
-                  <th style={posStyle}>Pos</th>
-                  <th style={nameStyle}>Name</th>
-                  {[...Array.apply(null, { length: this.props.attempts })].map(
-                    (_, i) => (
+      <React.Fragment>
+        <table className={tableClass}>
+          <thead className="bg-secondary text-white">
+            <tr>
+              {Array.from({ length: this.props.columns }).map((_, k) => {
+                return (
+                  <React.Fragment key={k}>
+                    <th style={posStyle}>Pos</th>
+                    <th style={nameStyle}>Name</th>
+                    {[
+                      ...Array.apply(null, { length: this.props.attempts }),
+                    ].map((_, i) => (
                       <th key={i} style={resultStyle}>{`R${i + 1}`}</th>
-                    )
-                  )}
-                  <th style={resultStyle}>Mean</th>
-                </React.Fragment>
+                    ))}
+                    <th style={resultStyle}>Mean</th>
+                  </React.Fragment>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: numberOfLines }).map((_, i) => {
+              return (
+                <tr key={i}>
+                  {Array.from({ length: this.props.columns }).map((_, j) => {
+                    let dataIndex = j * numberOfLines + i;
+                    if (dataIndex >= data.length) {
+                      return null;
+                    }
+                    let result = data[dataIndex];
+                    return (
+                      <React.Fragment key={j}>
+                        <th style={positionStyle}>{dataIndex + 1}</th>
+                        <td>{result.name}</td>
+                        {result.results.map((r, k) => {
+                          let woajIndex = woaj[k].indexOf(r);
+                          let style = {};
+                          if (woajIndex < woajStyle.length) {
+                            style = woajStyle[woajIndex];
+                          }
+                          return (
+                            <td key={k} style={style}>
+                              {r}
+                            </td>
+                          );
+                        })}
+                        <td>{outputFormat(result.avg)}</td>
+                      </React.Fragment>
+                    );
+                  })}
+                </tr>
               );
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {Array.from({ length: numberOfLines }).map((_, i) => {
-            return (
-              <tr key={i}>
-                {Array.from({ length: this.props.columns }).map((_, j) => {
-                  let dataIndex = j * numberOfLines + i;
-                  if (dataIndex >= data.length) {
-                    return null;
-                  }
-                  let result = data[dataIndex];
-                  return (
-                    <React.Fragment key={j}>
-                      <th>{dataIndex + 1}</th>
-                      <td>{result.name}</td>
-                      {result.results.map((r, k) => {
-                        let woajIndex = woaj[k].indexOf(r);
-                        let style = {};
-                        if (woajIndex < woajStyle.length) {
-                          style = woajStyle[woajIndex];
-                        }
-                        return (
-                          <td key={k} style={style}>
-                            {r}
-                          </td>
-                        );
-                      })}
-                      <td>{outputFormat(result.avg)}</td>
-                    </React.Fragment>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th />
-            <th>Woaj</th>
-            {woajs.map((r, i) => (
-              <th key={i} style={woajStyle[0]}>
-                {r}
-              </th>
-            ))}
-            <th style={woajStyle[0]}>{outputFormat(woajMean)}</th>
-          </tr>
-        </tfoot>
-      </table>
+          </tbody>
+          {this.props.columns === 1 && tfoot}
+        </table>
+        {this.props.columns > 1 && <table class={tableClass}>{tfoot}</table>}
+      </React.Fragment>
     );
   }
 }
