@@ -18,6 +18,14 @@ const positionStyle = {
   backgroundColor: "rgb(57, 181, 90)",
 };
 
+const dnfStyle = {
+  backgroundColor: "rgb(230, 0, 0)",
+};
+
+const dnsStyle = {
+  backgroundColor: "rgb(0, 138, 230)",
+};
+
 class Rank extends Component {
   render() {
     // Clear results and sort by avg then single
@@ -47,7 +55,9 @@ class Rank extends Component {
     let woajMean = avg(woajs); // Mean of the best results
 
     // Ordered list with all woajs
-    let woajMeanList = [...new Set(data.map((result) => result.avg))].sort();
+    let woajMeanList = [...new Set(data.map((result) => result.avg))]
+      .filter((x) => isFinite(x)) // Prevents DNF, DNS from being tagged as woaj
+      .sort();
 
     // Fixed style
     let resultWidth = 50.0 / (this.props.attempts + 1); // +1 for mean
@@ -67,7 +77,7 @@ class Rank extends Component {
           {this.props.columns === 1 && <th />}
           <th>Woaj</th>
           {woajs.map((r, i) => (
-            <th key={i}>{r}</th>
+            <th key={i}>{r || "-"}</th>
           ))}
           <th style={woajStyle[0]}>{outputFormat(woajMean)}</th>
         </tr>
@@ -79,7 +89,7 @@ class Rank extends Component {
     return (
       <React.Fragment>
         <table className={tableClass}>
-          <thead className="bg-secondary text-white">
+          <thead className="bg-dark text-white">
             <tr>
               {Array.from({ length: this.props.columns }).map((_, k) => {
                 return (
@@ -129,7 +139,11 @@ class Rank extends Component {
                         {result.results.map((r, k) => {
                           let woajIndex = woaj[k].indexOf(r);
                           let style = {};
-                          if (woajIndex < woajStyle.length) {
+                          if (r.toUpperCase() === "DNF") {
+                            style = dnfStyle;
+                          } else if (r.toUpperCase() === "DNS") {
+                            style = dnsStyle;
+                          } else if (woajIndex < woajStyle.length) {
                             style = woajStyle[woajIndex];
                           }
                           return (
