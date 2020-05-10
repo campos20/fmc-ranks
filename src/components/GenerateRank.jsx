@@ -163,6 +163,29 @@ class GenerateRank extends Component {
           </div>
           <div className="row justify-content-center">
             <div className="col-4">
+              <div className="btn-group m-2" role="group">
+                <button
+                  type="submit"
+                  className="btn btn-group btn-success"
+                  onClick={this.handleGenerate}
+                >
+                  Generate
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-group btn-primary"
+                  onClick={this.handleShrinkData}
+                >
+                  Shrink Data
+                </button>
+                <button
+                  type="reset"
+                  className="btn btn-group btn-warning"
+                  onClick={this.handleReset}
+                >
+                  Reset
+                </button>
+              </div>
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
                   <span className="input-group-text">Attempts</span>
@@ -186,29 +209,6 @@ class GenerateRank extends Component {
                   onChange={this.handleColumnsChange}
                   min={1}
                 />
-              </div>
-              <div className="btn-group m-2" role="group">
-                <button
-                  type="submit"
-                  className="btn btn-group btn-success"
-                  onClick={this.handleGenerate}
-                >
-                  Generate
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-group btn-primary"
-                  onClick={this.handleShrinkData}
-                >
-                  Shrink Data
-                </button>
-                <button
-                  type="reset"
-                  className="btn btn-group btn-warning"
-                  onClick={this.handleReset}
-                >
-                  Reset
-                </button>
               </div>
             </div>
           </div>

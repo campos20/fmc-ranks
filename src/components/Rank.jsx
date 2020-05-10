@@ -30,13 +30,24 @@ class Rank extends Component {
       })
       .sort(compareResults);
 
+    if (data.length === 0) {
+      return null;
+    }
+
     // Woajs for formatting
     let woaj = []; // List of lists with ordered results
     for (let i = 0; i < this.props.attempts; i++) {
-      woaj.push([...new Set(data.map((result) => result.results[i]))].sort());
+      woaj.push(
+        [...new Set(data.map((result) => result.results[i]))]
+          .filter((x) => !isNaN(x)) // This prevents DNF, DNS from being tagged as woaj
+          .sort()
+      );
     }
     let woajs = woaj.map((r) => r[0]); // Best result of each attempt
     let woajMean = avg(woajs); // Mean of the best results
+
+    // Ordered list with all woajs
+    let woajMeanList = [...new Set(data.map((result) => result.avg))].sort();
 
     // Fixed style
     let resultWidth = 50.0 / (this.props.attempts + 1); // +1 for mean
@@ -49,15 +60,14 @@ class Rank extends Component {
 
     let numberOfLines = Math.ceil(data.length / this.props.columns);
 
+    // Using this we can detach tfoot in case of multiple columns
     let tfoot = (
       <tfoot>
-        <tr>
+        <tr style={woajStyle[0]}>
           {this.props.columns === 1 && <th />}
           <th>Woaj</th>
           {woajs.map((r, i) => (
-            <th key={i} style={woajStyle[0]}>
-              {r}
-            </th>
+            <th key={i}>{r}</th>
           ))}
           <th style={woajStyle[0]}>{outputFormat(woajMean)}</th>
         </tr>
@@ -97,9 +107,24 @@ class Rank extends Component {
                       return null;
                     }
                     let result = data[dataIndex];
+
+                    let resultsAvg = result.avg;
+                    let woajAvgIndex = woajMeanList.indexOf(resultsAvg);
+                    let meanStyle = {};
+                    if (woajAvgIndex < woajStyle.length) {
+                      meanStyle = woajStyle[woajAvgIndex];
+                    }
                     return (
                       <React.Fragment key={j}>
-                        <th style={positionStyle}>{dataIndex + 1}</th>
+                        <th style={positionStyle}>
+                          {dataIndex === 0 || // Print "-"" in case of ties
+                          compareResults(
+                            data[dataIndex],
+                            data[dataIndex - 1]
+                          ) !== 0
+                            ? dataIndex + 1
+                            : "-"}
+                        </th>
                         <td>{result.name}</td>
                         {result.results.map((r, k) => {
                           let woajIndex = woaj[k].indexOf(r);
@@ -113,7 +138,7 @@ class Rank extends Component {
                             </td>
                           );
                         })}
-                        <td>{outputFormat(result.avg)}</td>
+                        <td style={meanStyle}>{outputFormat(result.avg)}</td>
                       </React.Fragment>
                     );
                   })}
@@ -123,7 +148,9 @@ class Rank extends Component {
           </tbody>
           {this.props.columns === 1 && tfoot}
         </table>
-        {this.props.columns > 1 && <table class={tableClass}>{tfoot}</table>}
+        {this.props.columns > 1 && (
+          <table className={tableClass}>{tfoot}</table>
+        )}
       </React.Fragment>
     );
   }
