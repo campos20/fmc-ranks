@@ -11,7 +11,7 @@ class GenerateRank extends Component {
 
   state = {
     attempts: 3,
-    columns: 1,
+    columns: 2,
     data: [],
     content: `Teh Keng Foo 24, 20, 25 = 23.00
   Oculte ou denuncie isso
