@@ -3,9 +3,16 @@ import { isValidLine } from "../util/result.util";
 import Rank from "./Rank";
 
 class GenerateRank extends Component {
+  // TODO just to generate table already
+  componentDidMount() {
+    let f = () => null;
+    this.handleGenerate({ preventDefault: f });
+  }
+
   state = {
     attempts: 3,
     columns: 1,
+    data: [],
     content: `Teh Keng Foo 24, 20, 25 = 23.00
   Oculte ou denuncie isso
   Curtir
@@ -96,7 +103,7 @@ class GenerateRank extends Component {
   };
 
   handleAttemptsChange = (e) => {
-    this.setState({ ...this.state, attempts: e.target.value });
+    this.setState({ ...this.state, attempts: Number(e.target.value) });
   };
 
   handleContentChange = (e) => {
@@ -128,7 +135,7 @@ class GenerateRank extends Component {
   };
 
   handleColumnsChange = (e) => {
-    this.setState({ ...this.state, columns: e.target.value });
+    this.setState({ ...this.state, columns: Number(e.target.value) });
   };
 
   render() {
@@ -208,7 +215,11 @@ class GenerateRank extends Component {
         </form>
         <div className="row justify-content-center">
           <div className="col-12">
-            <Rank attempts={this.state.attempts} data={this.state.data || []} />
+            <Rank
+              attempts={this.state.attempts}
+              data={this.state.data}
+              columns={this.state.columns}
+            />
           </div>
         </div>
       </div>

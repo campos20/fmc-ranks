@@ -4,7 +4,11 @@ import { ScrambleDisplay } from "scramble-display";
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [],
+    scrambles: [
+      "R' U' F U2 R' F2 U' L' D F D' B R' B U2 D2 R D2 L2 B2 L2 F2 D2 R' U' F",
+      "R' U' F R' F R' L2 U2 L F B L' U R2 F2 D2 R' B2 D2 R L2 U2 F' R' U' F",
+      "R' U' F L2 U' B2 D2 F D2 R2 F L2 U2 F2 L2 D R F2 U2 L' U2 L' F2 R' U' F",
+    ],
     numberOfScrambles: 3,
     loading: false,
     error: "",
@@ -95,7 +99,7 @@ class GenerateScrambles extends Component {
 
         <div className="row">
           <div className="col-12">
-            <table className="table">
+            <table className="table table-condensed">
               <tbody>
                 {!!this.state.scrambles &&
                   this.state.scrambles.map((scramble, i) => {

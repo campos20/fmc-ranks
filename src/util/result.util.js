@@ -43,10 +43,14 @@ export function isValidLine(line, n) {
 
 export function isValidResult(result) {
   // We accept as valid any integer > 0, also DNF and DNS.
-  if (result.match(/[0-9]+/)) return true;
+  if (isDigit(result)) return true;
   if (result.toUpperCase() === "DNF") return true;
   if (result.toUpperCase() === "DNS") return true;
   return false;
+}
+
+export function isDigit(result) {
+  return ("" + result).match(/[0-9]+/);
 }
 
 export function getName(validLine) {
