@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import { getFmcScrambles } from "../api/scramble.web.api";
-import { ScrambleDisplay } from "scramble-display";
+import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [
-      "R' U' F U2 R' F2 U' L' D F D' B R' B U2 D2 R D2 L2 B2 L2 F2 D2 R' U' F",
-      "R' U' F R' F R' L2 U2 L F B L' U R2 F2 D2 R' B2 D2 R L2 U2 F' R' U' F",
-      "R' U' F L2 U' B2 D2 F D2 R2 F L2 U2 F2 L2 D R F2 U2 L' U2 L' F2 R' U' F",
-    ],
+    scrambles: [], // Put scrambles here for making developing quicker
     numberOfScrambles: 3,
     loading: false,
     error: "",
@@ -82,20 +78,22 @@ class GenerateScrambles extends Component {
           </div>
         </form>
 
-        <div className="row">
-          <div className="form-check col-12 text-right">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              value={this.state.image3d}
-              onClick={this.handleImage3d}
-              id="image3dcheck"
-            />
-            <label className="form-check-label" htmlFor="image3dcheck">
-              3D image
-            </label>
+        {this.state.scrambles.length > 0 && (
+          <div className="row">
+            <div className="form-check col-12 text-right">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                value={this.state.image3d}
+                onClick={this.handleImage3d}
+                id="image3dcheck"
+              />
+              <label className="form-check-label" htmlFor="image3dcheck">
+                3D image
+              </label>
+            </div>
           </div>
-        </div>
+        )}
 
         {this.state.loading && (
           <div className="row m-3">
