@@ -4,11 +4,16 @@ import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [], // Put scrambles here for making developing quicker
+    scrambles: [
+      "R' U' F L B2 U2 L B D2 R' U2 L2 B U R2 U2 D2 F2 D2 R B2 L F2 R' U' F",
+      "R' U' F D2 B D2 F2 L2 B2 L2 D2 B U' F D2 L2 B2 F R' D' R U2 R' U' F",
+      "R' U' F U2 D2 F D B2 L B2 U' F B' R F2 B2 D2 R2 B R2 F2 B2 R' U' F",
+    ], // Put scrambles here for making developing quicker
     numberOfScrambles: 3,
     loading: false,
     error: "",
     image3d: false,
+    copiedToClipboardIndex: null,
   };
 
   handleNumberOfScramblesChange = (e) => {
@@ -26,6 +31,7 @@ class GenerateScrambles extends Component {
           scrambles: data.scrambles,
           loading: false,
           error: "",
+          copiedToClipboardIndex: null, // In case there was a coppied scramble and we generate more
         })
       )
       .catch((error) => {
@@ -41,6 +47,18 @@ class GenerateScrambles extends Component {
 
   handleImage3d = () => {
     this.setState({ ...this.state, image3d: !this.state.image3d });
+  };
+
+  setCopiedToClipboard = (i) => {
+    this.setState({ ...this.state, copiedToClipboardIndex: i });
+
+    // Copy to clipboard
+    var scramble = document.createElement("textarea");
+    document.body.appendChild(scramble);
+    scramble.value = i + 1 + ". " + this.state.scrambles[i];
+    scramble.select();
+    document.execCommand("copy");
+    document.body.removeChild(scramble);
   };
 
   render() {
@@ -123,9 +141,20 @@ class GenerateScrambles extends Component {
                   this.state.scrambles.map((scramble, i) => {
                     return (
                       <tr key={i}>
-                        <td className="align-middle">{`${
-                          i + 1
-                        }. ${scramble}`}</td>
+                        <td
+                          className="align-middle"
+                          onClick={(e) => this.setCopiedToClipboard(i)}
+                        >
+                          <div className="row text-center">{`${
+                            i + 1
+                          }. ${scramble}`}</div>
+                          <div className="row text-right text-muted">
+                            &nbsp;
+                            {this.state.copiedToClipboardIndex === i
+                              ? "Copied"
+                              : ""}
+                          </div>
+                        </td>
                         <td className="text-left">
                           <scramble-display
                             event="333"
