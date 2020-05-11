@@ -22,7 +22,7 @@ export function single(list) {
 
 export function getConsecutiveValids(line, n) {
   var out = [];
-  var array = line.split(/[ ,=]+/);
+  var array = line.split(/[ ,=()]+/);
   for (var i = 0; i < array.length; i++) {
     var part = array[i];
     if (isValidResult(part)) {
