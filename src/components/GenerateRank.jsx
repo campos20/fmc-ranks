@@ -2,15 +2,19 @@ import React, { Component } from "react";
 import { isValidLine } from "../util/result.util";
 import Rank from "./Rank";
 
+const getMaxTrim = (n) => Math.max(0, Math.floor((n - 1) / 2));
+
 class GenerateRank extends Component {
-  /*componentDidMount() { // simulates a click to generate. Helps developing
+  componentDidMount() {
+    // simulates a click to generate. Helps developing
     let f = () => null;
     this.handleGenerate({ preventDefault: f });
-  }*/
+  }
 
   state = {
     attempts: 12,
     columns: 1,
+    trim: 0,
     data: [],
     content: `Carter Kucala 19, 23, 26, 21, 21, 20, 23, 24, 23, 22, 21, 22 = 22.0
     4
@@ -96,7 +100,12 @@ class GenerateRank extends Component {
   };
 
   handleAttemptsChange = (e) => {
-    this.setState({ ...this.state, attempts: Number(e.target.value) });
+    let attempts = Number(e.target.value);
+    this.setState({
+      ...this.state,
+      attempts: attempts,
+      trim: Math.min(this.state.trim, getMaxTrim(attempts)), // In case we change attempts, we update trim
+    });
   };
 
   handleContentChange = (e) => {
@@ -131,6 +140,10 @@ class GenerateRank extends Component {
     this.setState({ ...this.state, columns: Number(e.target.value) });
   };
 
+  handleTrimChange = (e) => {
+    this.setState({ ...this.state, trim: Number(e.target.value) });
+  };
+
   render() {
     return (
       <div className="container">
@@ -155,7 +168,7 @@ class GenerateRank extends Component {
             </div>
           </div>
           <div className="row justify-content-center">
-            <div className="col-4">
+            <div className="col-8">
               <div className="btn-group m-2" role="group">
                 <button
                   type="submit"
@@ -201,6 +214,18 @@ class GenerateRank extends Component {
                   value={this.state.columns}
                   onChange={this.handleColumnsChange}
                   min={1}
+                />
+                <div className="input-group-prepend">
+                  <span className="input-group-text">Trim</span>
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  required
+                  value={this.state.trim}
+                  onChange={this.handleTrimChange}
+                  min={0}
+                  max={getMaxTrim(this.state.attempts)}
                 />
               </div>
             </div>
