@@ -118,7 +118,7 @@ class Rank extends Component {
                     ].map((_, i) => (
                       <th key={i} style={resultStyle}>{`R${i + 1}`}</th>
                     ))}
-                    <th style={resultStyle}>Mean</th>
+                    <th style={resultStyle}>{trim === 0 ? "Mean" : "Avg"}</th>
                   </React.Fragment>
                 );
               })}
