@@ -1,8 +1,8 @@
 import { avg, single } from "../util/result.util";
 
 export class Result {
-  constructor(results, name) {
-    this.avg = avg(results);
+  constructor(results, name, trim) {
+    this.avg = avg(results, trim);
     this.single = single(results);
     this.results = results;
     this.name = name;

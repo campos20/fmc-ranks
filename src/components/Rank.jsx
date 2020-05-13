@@ -28,13 +28,15 @@ const dnsStyle = {
 
 class Rank extends Component {
   render() {
+    let trim = this.props.trim;
+
     // Clear results and sort by avg then single
     let data = this.props.data
       .filter((line) => isValidLine(line, this.props.attempts))
       .map((line) => {
         let name = getName(line);
         let results = getConsecutiveValids(line, this.props.attempts);
-        return new Result(results, name);
+        return new Result(results, name, trim);
       })
       .sort(compareResults);
 
@@ -52,7 +54,7 @@ class Rank extends Component {
       );
     }
     let woajs = woaj.map((r) => r[0]); // Best result of each attempt
-    let woajMean = avg(woajs); // Mean of the best results
+    let woajMean = avg(woajs, trim); // Mean of the best results
 
     // Ordered list with all woajs
     let woajMeanList = [...new Set(data.map((result) => result.avg))]

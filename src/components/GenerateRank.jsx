@@ -239,6 +239,7 @@ class GenerateRank extends Component {
               attempts={this.state.attempts}
               data={this.state.data}
               columns={this.state.columns}
+              trim={this.state.trim}
             />
           </div>
         </div>
