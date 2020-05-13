@@ -1,17 +1,16 @@
 export function avg(list, trim) {
   if (list.length === 0) return Infinity;
 
-  for (var i = 0; i < list.length; i++) {
-    if (isNaN(list[i])) return Infinity;
-  }
-
   let copy = [...list];
   copy.sort();
 
-  return (
-    copy.slice(trim, copy.length - trim).reduce((a, b) => a + Number(b), 0) /
-    (copy.length - 2 * trim)
-  );
+  let sum = 0;
+  for (var i = trim; i < copy.length - trim; i++) {
+    if (isNaN(copy[i])) return Infinity;
+    sum += Number(copy[i]);
+  }
+
+  return sum / (copy.length - 2 * trim);
 }
 
 export function single(list) {
