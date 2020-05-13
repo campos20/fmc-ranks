@@ -28,13 +28,15 @@ const dnsStyle = {
 
 class Rank extends Component {
   render() {
+    let trim = this.props.trim;
+
     // Clear results and sort by avg then single
     let data = this.props.data
       .filter((line) => isValidLine(line, this.props.attempts))
       .map((line) => {
         let name = getName(line);
         let results = getConsecutiveValids(line, this.props.attempts);
-        return new Result(results, name);
+        return new Result(results, name, trim);
       })
       .sort(compareResults);
 
@@ -52,7 +54,7 @@ class Rank extends Component {
       );
     }
     let woajs = woaj.map((r) => r[0]); // Best result of each attempt
-    let woajMean = avg(woajs); // Mean of the best results
+    let woajMean = avg(woajs, trim); // Mean of the best results
 
     // Ordered list with all woajs
     let woajMeanList = [...new Set(data.map((result) => result.avg))]
@@ -70,15 +72,30 @@ class Rank extends Component {
 
     let numberOfLines = Math.ceil(data.length / this.props.columns);
 
+    let sortedWoajs = [...woajs].sort();
+    let woajsToTrim = [
+      ...sortedWoajs.slice(0, trim),
+      ...sortedWoajs.slice(sortedWoajs.length - trim, sortedWoajs.length),
+    ];
+    console.log(woajsToTrim);
+
     // Using this we can detach tfoot in case of multiple columns
     let tfoot = (
       <tfoot>
         <tr style={woajStyle[0]}>
           {this.props.columns === 1 && <th />}
           <th>Woaj</th>
-          {woajs.map((r, i) => (
-            <th key={i}>{r || "-"}</th>
-          ))}
+          {woajs.map((r, i) => {
+            let parenthesis = false;
+            let indexInWoajsToTrim = woajsToTrim.indexOf(r);
+            if (indexInWoajsToTrim >= 0) {
+              parenthesis = true;
+              woajsToTrim.splice(indexInWoajsToTrim, 1);
+            }
+            let toPrint = r || "-"; // Prevents all DNF from being blank
+
+            return <th key={i}>{parenthesis ? `(${toPrint})` : toPrint}</th>;
+          })}
           <th style={woajStyle[0]}>{outputFormat(woajMean)}</th>
         </tr>
       </tfoot>
@@ -101,7 +118,7 @@ class Rank extends Component {
                     ].map((_, i) => (
                       <th key={i} style={resultStyle}>{`R${i + 1}`}</th>
                     ))}
-                    <th style={resultStyle}>Mean</th>
+                    <th style={resultStyle}>{trim === 0 ? "Mean" : "Avg"}</th>
                   </React.Fragment>
                 );
               })}
@@ -117,6 +134,15 @@ class Rank extends Component {
                       return null;
                     }
                     let result = data[dataIndex];
+
+                    let sortedResults = [...result.results].sort();
+                    let resultsToTrim = [
+                      ...sortedResults.slice(0, trim),
+                      ...sortedResults.slice(
+                        sortedResults.length - trim,
+                        sortedResults.length
+                      ),
+                    ];
 
                     let resultsAvg = result.avg;
                     let woajAvgIndex = woajMeanList.indexOf(resultsAvg);
@@ -139,6 +165,15 @@ class Rank extends Component {
                         {result.results.map((r, k) => {
                           let woajIndex = woaj[k].indexOf(r);
                           let style = {};
+
+                          // Print with parenthesis if ignored during the average
+                          let parenthesis = false;
+                          let indexInResultsToTrim = resultsToTrim.indexOf(r);
+                          if (indexInResultsToTrim >= 0) {
+                            parenthesis = true;
+                            resultsToTrim.splice(indexInResultsToTrim, 1);
+                          }
+
                           if (r.toUpperCase() === "DNF") {
                             style = dnfStyle;
                           } else if (r.toUpperCase() === "DNS") {
@@ -148,7 +183,7 @@ class Rank extends Component {
                           }
                           return (
                             <td key={k} style={style}>
-                              {r}
+                              {parenthesis ? `(${r})` : r}
                             </td>
                           );
                         })}

@@ -2,21 +2,30 @@ import React, { Component } from "react";
 import { isValidLine } from "../util/result.util";
 import Rank from "./Rank";
 
+const getMaxTrim = (n) => Math.max(0, Math.floor((n - 1) / 2));
+
 class GenerateRank extends Component {
-  /*componentDidMount() { // simulates a click to generate. Helps developing
+  /*componentDidMount() {
+    // simulates a click to generate. Helps developing
     let f = () => null;
     this.handleGenerate({ preventDefault: f });
   }*/
 
   state = {
-    attempts: 3,
+    attempts: 12,
     columns: 1,
+    trim: 0,
     data: [],
     content: ``, // Paste the raw data here for developing
   };
 
   handleAttemptsChange = (e) => {
-    this.setState({ ...this.state, attempts: Number(e.target.value) });
+    let attempts = Number(e.target.value);
+    this.setState({
+      ...this.state,
+      attempts: attempts,
+      trim: Math.min(this.state.trim, getMaxTrim(attempts)), // In case we change attempts, we update trim
+    });
   };
 
   handleContentChange = (e) => {
@@ -51,6 +60,10 @@ class GenerateRank extends Component {
     this.setState({ ...this.state, columns: Number(e.target.value) });
   };
 
+  handleTrimChange = (e) => {
+    this.setState({ ...this.state, trim: Number(e.target.value) });
+  };
+
   render() {
     return (
       <div className="container">
@@ -75,7 +88,7 @@ class GenerateRank extends Component {
             </div>
           </div>
           <div className="row justify-content-center">
-            <div className="col-4">
+            <div className="col-sm-10">
               <div className="btn-group m-2" role="group">
                 <button
                   type="submit"
@@ -99,6 +112,8 @@ class GenerateRank extends Component {
                   Reset
                 </button>
               </div>
+            </div>
+            <div className="row">
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
                   <span className="input-group-text">Attempts</span>
@@ -122,6 +137,18 @@ class GenerateRank extends Component {
                   onChange={this.handleColumnsChange}
                   min={1}
                 />
+                <div className="input-group-prepend">
+                  <span className="input-group-text">Trim</span>
+                </div>
+                <input
+                  type="number"
+                  className="form-control"
+                  required
+                  value={this.state.trim}
+                  onChange={this.handleTrimChange}
+                  min={0}
+                  max={getMaxTrim(this.state.attempts)}
+                />
               </div>
             </div>
           </div>
@@ -132,6 +159,7 @@ class GenerateRank extends Component {
               attempts={this.state.attempts}
               data={this.state.data}
               columns={this.state.columns}
+              trim={this.state.trim}
             />
           </div>
         </div>

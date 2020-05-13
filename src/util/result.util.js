@@ -1,12 +1,16 @@
-export function avg(list) {
+export function avg(list, trim) {
   if (list.length === 0) return Infinity;
 
-  var sum = 0;
-  for (var i = 0; i < list.length; i++) {
-    if (isNaN(list[i])) return Infinity;
-    sum += Number(list[i]);
+  let copy = [...list];
+  copy.sort();
+
+  let sum = 0;
+  for (var i = trim; i < copy.length - trim; i++) {
+    if (isNaN(copy[i])) return Infinity;
+    sum += Number(copy[i]);
   }
-  return sum / list.length;
+
+  return sum / (copy.length - 2 * trim);
 }
 
 export function single(list) {
@@ -22,7 +26,7 @@ export function single(list) {
 
 export function getConsecutiveValids(line, n) {
   var out = [];
-  var array = line.split(/[ ,=]+/);
+  var array = line.split(/[ ,=()]+/);
   for (var i = 0; i < array.length; i++) {
     var part = array[i];
     if (isValidResult(part)) {
