@@ -12,7 +12,7 @@ class GenerateRank extends Component {
   }*/
 
   state = {
-    attempts: 12,
+    attempts: 3,
     columns: 1,
     trim: 0,
     data: [],
