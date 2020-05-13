@@ -168,7 +168,7 @@ class GenerateRank extends Component {
             </div>
           </div>
           <div className="row justify-content-center">
-            <div className="col-8">
+            <div className="col-sm-10">
               <div className="btn-group m-2" role="group">
                 <button
                   type="submit"
@@ -192,6 +192,8 @@ class GenerateRank extends Component {
                   Reset
                 </button>
               </div>
+            </div>
+            <div className="row">
               <div className="input-group mb-3">
                 <div className="input-group-prepend">
                   <span className="input-group-text">Attempts</span>
