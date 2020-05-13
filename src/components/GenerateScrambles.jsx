@@ -4,11 +4,7 @@ import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [
-      "R' U' F L B2 U2 L B D2 R' U2 L2 B U R2 U2 D2 F2 D2 R B2 L F2 R' U' F",
-      "R' U' F D2 B D2 F2 L2 B2 L2 D2 B U' F D2 L2 B2 F R' D' R U2 R' U' F",
-      "R' U' F U2 D2 F D B2 L B2 U' F B' R F2 B2 D2 R2 B R2 F2 B2 R' U' F",
-    ], // Put scrambles here for making developing quicker
+    scrambles: [,], // Put scrambles here for making developing quicker
     numberOfScrambles: 3,
     loading: false,
     error: "",
