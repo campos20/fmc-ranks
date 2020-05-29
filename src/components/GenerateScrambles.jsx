@@ -4,7 +4,7 @@ import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [,], // Put scrambles here for making developing quicker
+    scrambles: [], // Put scrambles here for making developing quicker
     numberOfScrambles: 3,
     loading: false,
     error: "",
