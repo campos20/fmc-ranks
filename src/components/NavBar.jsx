@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const NavBar = (props) => {
   return (
     <Navbar bg="primary" expand="lg" variant="dark">
-      <Navbar.Brand href={props.baseLink}>
+      <Link to={props.baseLink}>
         <img
           src={require("../assets/logo.svg")}
           width="30"
@@ -13,7 +13,7 @@ const NavBar = (props) => {
           className="d-inline-block align-top text-white"
           alt="Logo"
         />
-      </Navbar.Brand>
+      </Link>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
