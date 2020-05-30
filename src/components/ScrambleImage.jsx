@@ -3,7 +3,7 @@ import ScrambleImagesTable from "./ScrambleImagesTable";
 import isValid from "../util/move.util";
 
 class ScrambleImage extends Component {
-  state = { content: "R' U' F\nR2 U2 R2", validScrambles: [] };
+  state = { content: "", validScrambles: [] };
 
   handleContentChange = (e) => {
     this.setState({ ...this.state, content: e.target.value });

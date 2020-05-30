@@ -10,6 +10,7 @@ const NavBar = (props) => {
           width="30"
           height="30"
           className="d-inline-block align-top text-white"
+          alt="Logo"
         />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -26,9 +27,6 @@ const NavBar = (props) => {
           </Nav.Link>
           <Nav.Link className="text-white" href={props.aboutLink}>
             About
-          </Nav.Link>
-          <Nav.Link className="text-white" href={props.legacyLink}>
-            Legacy
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

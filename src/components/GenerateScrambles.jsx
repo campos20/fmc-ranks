@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getFmcScrambles } from "../api/scramble.web.api";
-import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
+import ScrambleImagesTable from "./ScrambleImagesTable";
 
 class GenerateScrambles extends Component {
   state = {
@@ -75,7 +75,6 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         </form>
-
         {this.state.loading && (
           <div className="row m-3">
             <div className="col-12">
@@ -85,7 +84,6 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         )}
-
         {!!this.state.error && (
           <div className="row m-3">
             <div className="col-12">
@@ -95,43 +93,7 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         )}
-
-        <div className="row">
-          <div className="col-12">
-            <table className="table table-condensed">
-              <tbody>
-                {!!this.state.scrambles &&
-                  this.state.scrambles.map((scramble, i) => {
-                    return (
-                      <tr key={i}>
-                        <td
-                          className="align-middle"
-                          onClick={(e) => this.setCopiedToClipboard(i)}
-                        >
-                          <div className="row text-center">{`${
-                            i + 1
-                          }. ${scramble}`}</div>
-                          <div className="row text-right text-muted">
-                            &nbsp;
-                            {this.state.copiedToClipboardIndex === i
-                              ? "Copied"
-                              : ""}
-                          </div>
-                        </td>
-                        <td className="text-left">
-                          <scramble-display
-                            event="333"
-                            scramble={scramble}
-                            visualization={this.state.image3d ? "3D" : "2D"}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <ScrambleImagesTable scrambles={this.state.scrambles} />
       </div>
     );
   }

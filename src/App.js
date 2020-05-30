@@ -13,7 +13,6 @@ const rankLink = "/rank";
 const scrambleLink = "/scramble";
 const scrambleImageLink = "/scramble-image";
 const aboutLink = "/about";
-const legacyLink = "/legacy";
 
 function App() {
   return (
@@ -25,7 +24,6 @@ function App() {
           scrambleLink={scrambleLink}
           scrambleImageLink={scrambleImageLink}
           aboutLink={aboutLink}
-          legacyLink={legacyLink}
         />
         <Switch>
           <Route exact path={baseLink}>

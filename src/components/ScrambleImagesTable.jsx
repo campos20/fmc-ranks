@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
 
 class ScrambleImagesTable extends Component {
   state = { copiedToClipboardIndex: null, image3d: false };
@@ -28,7 +29,10 @@ class ScrambleImagesTable extends Component {
       <React.Fragment>
         {this.props.scrambles.length > 0 && (
           <div className="row">
-            <div className="form-check col-12 text-right">
+            <div className="col-6 text-left text-muted">
+              You can click to copy
+            </div>
+            <div className="form-check col-6 text-right">
               <input
                 type="checkbox"
                 className="form-check-input"
