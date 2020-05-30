@@ -1,17 +1,16 @@
 // TODO find a better way to validate scrambles
 // I'm sure I'm not the first who needs it
 
-Array.prototype.contains = (item) => !this.indexOf(item) < 0;
-
-export default isValid = (scramble) => {
+const isValid = (scramble) => {
   return scramble
+    .trim()
     .split(" ")
     .map(isValidMove)
     .reduce((a, b) => a && b, true);
 };
 
 const allowedMoves = "UFRDLB";
-const allowedModifiers = ["'", "2"];
+const allowedModifiers = "'2";
 const allowedSlices = "MSE";
 const allowedRotations = "xyz";
 
@@ -31,23 +30,31 @@ const isValidMove = (move) => {
     if (!isValidSingleMove(move[0])) {
       return false;
     }
-    if (!allowedModifiers.contains(move[1] && !move !== "w")) {
+    if (!allowedModifiers.includes(move[1]) && move[1] !== "w") {
       return false;
     }
   }
 
-  if (
-    (move.length === 3 && move[1] != "w") ||
-    !allowedMoves.contains(move[0])
-  ) {
-    // Uw'
-    return false;
+  // Uw'
+  if (move.length === 3) {
+    if (move[1] !== "w") {
+      return false;
+    }
+    if (!allowedModifiers.includes(move[2])) {
+      return false;
+    }
+    if (!isValidSingleMove(move[0])) {
+      return false;
+    }
   }
 
   return true;
 };
 
+// moved.length === 1
 const isValidSingleMove = (move) =>
-  allowedMoves.contains(move) ||
-  allowedRotations.contains(move) ||
-  allowedSlices.contains(move);
+  allowedMoves.includes(move) ||
+  allowedRotations.includes(move) ||
+  allowedSlices.includes(move);
+
+export default isValid;
