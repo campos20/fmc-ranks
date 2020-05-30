@@ -2,32 +2,50 @@ import React from "react";
 import "./App.css";
 import GenerateScrambles from "./components/GenerateScrambles";
 import GenerateRank from "./components/GenerateRank";
+import Home from "./components/Home";
 import NavBar from "./components/NavBar";
+import About from "./components/About";
+import ScrambleImage from "./components/ScrambleImage";
+import { BrowserRouter as HashRouter, Switch, Route } from "react-router-dom";
+
+const baseLink = "/";
+const rankLink = "/rank";
+const scrambleLink = "/scramble";
+const scrambleImageLink = "/scramble-image";
+const aboutLink = "/about";
+const legacyLink = "/legacy";
 
 function App() {
   return (
-    <div className="App">
-      <NavBar />
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <h1>FMC Ranks</h1>
-          </div>
-        </div>
-        <br />
-        <div className="row">
-          <div className="col-12">
+    <HashRouter basename={baseLink}>
+      <div className="App">
+        <NavBar
+          baseLink={baseLink}
+          rankLink={rankLink}
+          scrambleLink={scrambleLink}
+          scrambleImageLink={scrambleImageLink}
+          aboutLink={aboutLink}
+          legacyLink={legacyLink}
+        />
+        <Switch>
+          <Route exact path={baseLink}>
+            <Home />
+          </Route>
+          <Route path={rankLink}>
             <GenerateRank />
-          </div>
-        </div>
-        <br />
-        <div className="row">
-          <div className="col-12">
+          </Route>
+          <Route path={scrambleLink}>
             <GenerateScrambles />
-          </div>
-        </div>
+          </Route>
+          <Route path={scrambleImageLink}>
+            <ScrambleImage />
+          </Route>
+          <Route path={aboutLink}>
+            <About />
+          </Route>
+        </Switch>
       </div>
-    </div>
+    </HashRouter>
   );
 }
 
