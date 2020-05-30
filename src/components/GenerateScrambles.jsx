@@ -41,22 +41,6 @@ class GenerateScrambles extends Component {
     this.setState({ ...this.state, loading: flag });
   };
 
-  handleImage3d = () => {
-    this.setState({ ...this.state, image3d: !this.state.image3d });
-  };
-
-  setCopiedToClipboard = (i) => {
-    this.setState({ ...this.state, copiedToClipboardIndex: i });
-
-    // Copy to clipboard
-    var scramble = document.createElement("textarea");
-    document.body.appendChild(scramble);
-    scramble.value = i + 1 + ". " + this.state.scrambles[i];
-    scramble.select();
-    document.execCommand("copy");
-    document.body.removeChild(scramble);
-  };
-
   render() {
     return (
       <div className="container">
@@ -91,23 +75,6 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         </form>
-
-        {this.state.scrambles.length > 0 && (
-          <div className="row">
-            <div className="form-check col-12 text-right">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                value={this.state.image3d}
-                onClick={this.handleImage3d}
-                id="image3dcheck"
-              />
-              <label className="form-check-label" htmlFor="image3dcheck">
-                3D image
-              </label>
-            </div>
-          </div>
-        )}
 
         {this.state.loading && (
           <div className="row m-3">
