@@ -9,10 +9,10 @@ import ScrambleImage from "./components/ScrambleImage";
 import { HashRouter, Switch, Route } from "react-router-dom";
 
 const baseLink = "/";
-const rankLink = "/rank";
-const scrambleLink = "/scramble";
-const scrambleImageLink = "/scramble-image";
-const aboutLink = "/about";
+const rankLink = "rank";
+const scrambleLink = "scramble";
+const scrambleImageLink = "scramble-image";
+const aboutLink = "about";
 
 function App() {
   return (
@@ -26,11 +26,21 @@ function App() {
           aboutLink={aboutLink}
         />
         <Switch>
-          <Route exact path={baseLink} component={Home} />
-          <Route path={rankLink} component={GenerateRank} />
-          <Route path={scrambleLink} component={GenerateScrambles} />
-          <Route path={scrambleImageLink} component={ScrambleImage} />
-          <Route path={aboutLink} component={About} />
+          <Route exact path={baseLink}>
+            <Home />
+          </Route>
+          <Route path={rankLink}>
+            <GenerateRank />
+          </Route>
+          <Route path={scrambleLink}>
+            <GenerateScrambles />
+          </Route>
+          <Route path={scrambleImageLink}>
+            <ScrambleImage />
+          </Route>
+          <Route path={aboutLink}>
+            <About />
+          </Route>
         </Switch>
       </div>
     </HashRouter>
