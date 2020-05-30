@@ -6,7 +6,7 @@ import Home from "./components/Home";
 import NavBar from "./components/NavBar";
 import About from "./components/About";
 import ScrambleImage from "./components/ScrambleImage";
-import { BrowserRouter as HashRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 
 const baseLink = "/";
 const rankLink = "/rank";
@@ -26,21 +26,11 @@ function App() {
           aboutLink={aboutLink}
         />
         <Switch>
-          <Route exact path={baseLink}>
-            <Home />
-          </Route>
-          <Route path={rankLink}>
-            <GenerateRank />
-          </Route>
-          <Route path={scrambleLink}>
-            <GenerateScrambles />
-          </Route>
-          <Route path={scrambleImageLink}>
-            <ScrambleImage />
-          </Route>
-          <Route path={aboutLink}>
-            <About />
-          </Route>
+          <Route exact path={baseLink} component={Home} />
+          <Route path={rankLink} component={GenerateRank} />
+          <Route path={scrambleLink} component={GenerateScrambles} />
+          <Route path={scrambleImageLink} component={ScrambleImage} />
+          <Route path={aboutLink} component={About} />
         </Switch>
       </div>
     </HashRouter>
