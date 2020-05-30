@@ -1,9 +1,10 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const NavBar = (props) => {
   return (
-    <Navbar bg="primary" expand="lg" variant="dark" fixedTop>
+    <Navbar bg="primary" expand="lg" variant="dark">
       <Navbar.Brand href={props.baseLink}>
         <img
           src={require("../assets/logo.svg")}
@@ -16,18 +17,18 @@ const NavBar = (props) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link className="text-white" href={props.rankLink}>
+          <Link className="text-white m-2" to={props.rankLink}>
             Rank
-          </Nav.Link>
-          <Nav.Link className="text-white" href={props.scrambleLink}>
+          </Link>
+          <Link className="text-white m-2" to={props.scrambleLink}>
             Scramble
-          </Nav.Link>
-          <Nav.Link className="text-white" href={props.scrambleImageLink}>
+          </Link>
+          <Link className="text-white m-2" to={props.scrambleImageLink}>
             Image
-          </Nav.Link>
-          <Nav.Link className="text-white" href={props.aboutLink}>
+          </Link>
+          <Link className="text-white m-2" to={props.aboutLink}>
             About
-          </Nav.Link>
+          </Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

@@ -9,10 +9,10 @@ import ScrambleImage from "./components/ScrambleImage";
 import { HashRouter, Switch, Route } from "react-router-dom";
 
 const baseLink = "/";
-const rankLink = "rank";
-const scrambleLink = "scramble";
-const scrambleImageLink = "scramble-image";
-const aboutLink = "about";
+const rankLink = "/rank";
+const scrambleLink = "/scramble";
+const scrambleImageLink = "/scramble-image";
+const aboutLink = "/about";
 
 function App() {
   return (
