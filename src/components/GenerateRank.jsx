@@ -83,7 +83,7 @@ class GenerateRank extends Component {
                   placeholder="Raw content"
                   required
                   rows="8"
-                ></textarea>
+                />
               </div>
             </div>
           </div>

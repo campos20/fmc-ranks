@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { getFmcScrambles } from "../api/scramble.web.api";
-import { ScrambleDisplay } from "scramble-display"; // Actually, this is used
+import ScrambleImagesTable from "./ScrambleImagesTable";
 
 class GenerateScrambles extends Component {
   state = {
-    scrambles: [,], // Put scrambles here for making developing quicker
+    scrambles: [], // Put scrambles here for making developing quicker
     numberOfScrambles: 3,
     loading: false,
     error: "",
@@ -41,22 +41,6 @@ class GenerateScrambles extends Component {
     this.setState({ ...this.state, loading: flag });
   };
 
-  handleImage3d = () => {
-    this.setState({ ...this.state, image3d: !this.state.image3d });
-  };
-
-  setCopiedToClipboard = (i) => {
-    this.setState({ ...this.state, copiedToClipboardIndex: i });
-
-    // Copy to clipboard
-    var scramble = document.createElement("textarea");
-    document.body.appendChild(scramble);
-    scramble.value = i + 1 + ". " + this.state.scrambles[i];
-    scramble.select();
-    document.execCommand("copy");
-    document.body.removeChild(scramble);
-  };
-
   render() {
     return (
       <div className="container">
@@ -91,24 +75,6 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         </form>
-
-        {this.state.scrambles.length > 0 && (
-          <div className="row">
-            <div className="form-check col-12 text-right">
-              <input
-                type="checkbox"
-                className="form-check-input"
-                value={this.state.image3d}
-                onClick={this.handleImage3d}
-                id="image3dcheck"
-              />
-              <label className="form-check-label" htmlFor="image3dcheck">
-                3D image
-              </label>
-            </div>
-          </div>
-        )}
-
         {this.state.loading && (
           <div className="row m-3">
             <div className="col-12">
@@ -118,7 +84,6 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         )}
-
         {!!this.state.error && (
           <div className="row m-3">
             <div className="col-12">
@@ -128,43 +93,7 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         )}
-
-        <div className="row">
-          <div className="col-12">
-            <table className="table table-condensed">
-              <tbody>
-                {!!this.state.scrambles &&
-                  this.state.scrambles.map((scramble, i) => {
-                    return (
-                      <tr key={i}>
-                        <td
-                          className="align-middle"
-                          onClick={(e) => this.setCopiedToClipboard(i)}
-                        >
-                          <div className="row text-center">{`${
-                            i + 1
-                          }. ${scramble}`}</div>
-                          <div className="row text-right text-muted">
-                            &nbsp;
-                            {this.state.copiedToClipboardIndex === i
-                              ? "Copied"
-                              : ""}
-                          </div>
-                        </td>
-                        <td className="text-left">
-                          <scramble-display
-                            event="333"
-                            scramble={scramble}
-                            visualization={this.state.image3d ? "3D" : "2D"}
-                          />
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <ScrambleImagesTable scrambles={this.state.scrambles} />
       </div>
     );
   }
