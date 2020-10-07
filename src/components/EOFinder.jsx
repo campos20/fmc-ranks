@@ -11,6 +11,7 @@ class EOFinder extends Component {
     maxMoves: "4",
     scramble:
       "R' U' F D2 F2 L2 R2 D L2 D B2 R' F2 L2 B' L2 B D' U' L R' F' R' U' F",
+    eoList: [],
   };
 
   componentDidMount() {
@@ -30,11 +31,32 @@ class EOFinder extends Component {
     cube.applySequence(this.state.scramble);
 
     let eoMovesLimit = Number(this.state.maxMoves);
-    console.log(cube.getEoList(eoMovesLimit, AXIS.UD_AXIS));
+
+    Object.keys(AXIS).forEach((axis) =>
+      cube.getEoList(eoMovesLimit, axis).then((eoList) =>
+        this.setState({
+          ...this.state,
+          eoList: [...this.state.eoList, ...eoList],
+        })
+      )
+    );
+
+    /*    cube
+      .getEoList(eoMovesLimit, AXIS.UD_AXIS)
+      .then((eoList) =>
+        this.setState({
+          ...this.state,
+          eoList: [...this.state.eoList, ...eoList],
+        })
+      );
+    cube.getEoList(eoMovesLimit, AXIS.RL_AXIS);
+    cube.getEoList(eoMovesLimit, AXIS.FB_AXIS);*/
   };
 
   render() {
     let scrambleIsValid = isValid(this.state.scramble);
+    let eoList = [...this.state.eoList];
+    eoList.sort((a, b) => (a.getSize() > b.getSize() ? 1 : -1));
     return (
       <div className="container">
         <div className="row">
@@ -88,6 +110,26 @@ class EOFinder extends Component {
             </div>
           </div>
         </form>
+        {eoList.length > 0 && (
+          <table className="table table-striped table-hover table-bordered">
+            <thead className="thead thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Size</th>
+                <th scioe="col">EO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {eoList.map((eo, i) => (
+                <tr key={i}>
+                  <th scope="row">{i + 1}</th>
+                  <td>{eo.getSize()}</td>
+                  <td>{eo.toString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     );
   }

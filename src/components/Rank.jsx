@@ -77,7 +77,6 @@ class Rank extends Component {
       ...sortedWoajs.slice(0, trim),
       ...sortedWoajs.slice(sortedWoajs.length - trim, sortedWoajs.length),
     ];
-    console.log(woajsToTrim);
 
     // Using this we can detach tfoot in case of multiple columns
     let tfoot = (

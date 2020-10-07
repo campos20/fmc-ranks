@@ -20,12 +20,12 @@ export default class Niss {
 
   toString() {
     let result = [];
-    result.add(String.join(" ", this.moves));
+    result.push(this.moves.join(" "));
     if (this.preMoves.length !== 0) {
-      result.add("(" + String.join(" ", this.preMoves) + ")");
+      result.push("(" + this.preMoves.join(" ") + ")");
     }
 
-    return String.join(" ", result).trim();
+    return result.join(" ");
   }
 
   isValid() {

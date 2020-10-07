@@ -133,7 +133,7 @@ const willChangeRLEo = (lastMove) => {
 
 const willChangeEoFace = (lastMove, face1, face2) => {
   let face = extractFace(lastMove);
-  if (face != face1 && face != face2) {
+  if (face !== face1 && face !== face2) {
     return false;
   }
   return !isDouble(lastMove);

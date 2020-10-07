@@ -259,7 +259,7 @@ export default class Cube {
     return Math.floor(c / this.FACE_SIZE);
   }
 
-  getEoList(limit, axis) {
+  async getEoList(limit, axis) {
     let eoMoves = [];
 
     // Check if the cube is already oriented
