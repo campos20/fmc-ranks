@@ -72,7 +72,15 @@ class EOFinder extends Component {
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <h3>EO Finder</h3>
+            <h3>
+              EO Finder{" "}
+              <span
+                className="badge badge-pill badge-primary help"
+                title="This is found by brute force and computation is left to your device. It can take long."
+              >
+                ?
+              </span>
+            </h3>
           </div>
         </div>
         <form

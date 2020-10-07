@@ -42,3 +42,7 @@ h3 {
   font-variant: small-caps;
   font-weight: bold !important;
 }
+
+.help {
+  font-size: 12px !important;
+}
