@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NavBar = (props) => {
   return (
-    <Navbar bg="primary" expand="lg" variant="dark">
+    <Navbar bg="primary" expand="lg" variant="dark" className="sticky-top">
       <Link to={props.baseLink}>
         <img
           src={require("../assets/logo.svg")}
