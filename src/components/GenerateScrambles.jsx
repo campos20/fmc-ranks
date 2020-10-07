@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getFmcScrambles } from "../api/scramble.web.api";
 import ScrambleImagesTable from "./ScrambleImagesTable";
+import Loading from "./Loading";
 
 class GenerateScrambles extends Component {
   state = {
@@ -75,15 +76,7 @@ class GenerateScrambles extends Component {
             </div>
           </div>
         </form>
-        {this.state.loading && (
-          <div className="row m-3">
-            <div className="col-12">
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
-          </div>
-        )}
+        {this.state.loading && <Loading />}
         {!!this.state.error && (
           <div className="row m-3">
             <div className="col-12">

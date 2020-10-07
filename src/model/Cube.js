@@ -1,5 +1,4 @@
 import breakEoOnAxis from "../util/niss.util";
-import Niss from "./Niss";
 import { willChangeEo } from "../util/move.util";
 
 import {
@@ -259,34 +258,25 @@ export default class Cube {
     return Math.floor(c / this.FACE_SIZE);
   }
 
-  async getEoList(limit, axis) {
+  getEoList(size, axis) {
     let eoMoves = [];
 
-    // Check if the cube is already oriented
-    if (this.isOriented(axis)) {
-      eoMoves.push(new Niss());
-    }
+    // Using the reminder, we can get every possible move sequence
+    for (let i = 0; i < Math.pow(this.ALLOWED_MOVES.length, size); i++) {
+      let currentMoves = this.makeNumberIntoMoves(i, size);
 
-    for (let size = 1; size <= limit; size++) {
-      // Math.pow(allowedMoves.size(), eoMovesLimit) is the total number of moves up
-      // to eoMovesLimit
-      // Using the reminder, we can get every possible move sequence
-      for (let i = 0; i < Math.pow(this.ALLOWED_MOVES.length, size); i++) {
-        let currentMoves = this.makeNumberIntoMoves(i, size);
+      let lastMove = currentMoves[currentMoves.length - 1];
 
-        let lastMove = currentMoves[currentMoves.length - 1];
-
-        if (!willChangeEo(lastMove, axis)) {
-          continue;
-        }
-
-        breakEoOnAxis(currentMoves, axis).forEach((niss) => {
-          let cube = niss.apply(this);
-          if (cube.isOriented(axis)) {
-            eoMoves.push(niss);
-          }
-        });
+      if (!willChangeEo(lastMove, axis)) {
+        continue;
       }
+
+      breakEoOnAxis(currentMoves, axis).forEach((niss) => {
+        let cube = niss.apply(this);
+        if (cube.isOriented(axis)) {
+          eoMoves.push(niss);
+        }
+      });
     }
     return eoMoves;
   }

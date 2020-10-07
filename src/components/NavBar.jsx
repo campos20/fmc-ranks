@@ -26,11 +26,11 @@ const NavBar = (props) => {
           <Link className="text-white m-2" to={props.scrambleImageLink}>
             Image
           </Link>
-          <Link className="text-white m-2" to={props.aboutLink}>
-            About
-          </Link>
           <Link className="text-white m-2" to={props.eOFinderLink}>
             EO Finder
+          </Link>
+          <Link className="text-white m-2" to={props.aboutLink}>
+            About
           </Link>
         </Nav>
       </Navbar.Collapse>

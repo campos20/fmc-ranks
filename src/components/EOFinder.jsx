@@ -3,20 +3,18 @@ import { isValid } from "../util/move.util";
 
 import Cube from "../model/Cube";
 import AXIS from "../constants/axis.constants";
+import Loading from "./Loading";
 
-const MAX_SOLUTION_SIZE = 7;
+const MAX_SOLUTION_SIZE = 5;
 
 class EOFinder extends Component {
   state = {
     maxMoves: "4",
-    scramble:
-      "R' U' F D2 F2 L2 R2 D L2 D B2 R' F2 L2 B' L2 B D' U' L R' F' R' U' F",
+    scramble: "",
     eoList: [],
+    eosLeft: 0,
+    loaded: false,
   };
-
-  componentDidMount() {
-    this.handleClick();
-  }
 
   handleScrambleChange = (e) => {
     this.setState({ ...this.setState, scramble: e.target.value });
@@ -26,36 +24,48 @@ class EOFinder extends Component {
     this.setState({ ...this.setState, maxMoves: e.target.value });
   };
 
-  handleClick = () => {
-    let cube = new Cube();
-    cube.applySequence(this.state.scramble);
+  handleSubmit = () => {
+    let keys = Object.keys(AXIS);
 
     let eoMovesLimit = Number(this.state.maxMoves);
 
-    Object.keys(AXIS).forEach((axis) =>
-      cube.getEoList(eoMovesLimit, axis).then((eoList) =>
-        this.setState({
-          ...this.state,
-          eoList: [...this.state.eoList, ...eoList],
-        })
-      )
-    );
+    // Clear EO list for now
+    // We use eosLeft to show a spinner
+    this.setState({
+      ...this.state,
+      eoList: [],
+      eosLeft: keys.length * eoMovesLimit,
+      loaded: false,
+    });
 
-    /*    cube
-      .getEoList(eoMovesLimit, AXIS.UD_AXIS)
-      .then((eoList) =>
-        this.setState({
-          ...this.state,
-          eoList: [...this.state.eoList, ...eoList],
-        })
+    let cube = new Cube();
+    cube.applySequence(this.state.scramble);
+
+    // TODO handle cube already oriented
+    // We could check if cube.isOriented(axis) and display a F0 or something.
+
+    // Async
+    for (let size = 1; size <= eoMovesLimit; size++) {
+      keys.forEach((axis) =>
+        setTimeout(() => {
+          let eoList = cube.getEoList(size, axis);
+          this.setState({
+            ...this.state,
+            eoList: [...this.state.eoList, ...eoList],
+            eosLeft: this.state.eosLeft - 1,
+            loaded: true,
+          });
+        }, 0)
       );
-    cube.getEoList(eoMovesLimit, AXIS.RL_AXIS);
-    cube.getEoList(eoMovesLimit, AXIS.FB_AXIS);*/
+    }
   };
 
   render() {
     let scrambleIsValid = isValid(this.state.scramble);
-    let eoList = [...this.state.eoList];
+    let eoList = this.state.eoList;
+    let eosFound = eoList.length;
+
+    // Sort by solution size.
     eoList.sort((a, b) => (a.getSize() > b.getSize() ? 1 : -1));
     return (
       <div className="container">
@@ -64,7 +74,10 @@ class EOFinder extends Component {
             <h3>EO Finder</h3>
           </div>
         </div>
-        <form className="row justify-content-center">
+        <form
+          className="row justify-content-center"
+          onSubmit={this.handleSubmit}
+        >
           <div className="col-12">
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -72,9 +85,7 @@ class EOFinder extends Component {
               </div>
               <input
                 type="text"
-                className={
-                  "form-control" + (!scrambleIsValid ? " bg-danger" : "")
-                }
+                className="form-control"
                 required
                 value={this.state.scramble}
                 onChange={this.handleScrambleChange}
@@ -98,37 +109,38 @@ class EOFinder extends Component {
               />
             </div>
             <div className="btn-group m-2" role="group">
-              <button
-                type="submit"
-                className="btn btn-group btn-primary"
-                onClick={this.handleClick}
-                disabled={!scrambleIsValid}
-                title={scrambleIsValid ? "" : "Invalid scramble"}
-              >
+              <button type="submit" className="btn btn-group btn-primary">
                 Find EOs
               </button>
             </div>
           </div>
         </form>
-        {eoList.length > 0 && (
-          <table className="table table-striped table-hover table-bordered">
-            <thead className="thead thead-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Size</th>
-                <th scioe="col">EO</th>
-              </tr>
-            </thead>
-            <tbody>
-              {eoList.map((eo, i) => (
-                <tr key={i}>
-                  <th scope="row">{i + 1}</th>
-                  <td>{eo.getSize()}</td>
-                  <td>{eo.toString()}</td>
+        {this.state.eosLeft > 0 && <Loading />}
+        {this.state.loaded && eosFound === 0 && (
+          <div className="alert alert-info">No EOs found.</div>
+        )}
+        {eosFound > 0 && (
+          <React.Fragment>
+            <p>Found {eosFound} EOs.</p>
+            <table className="table table-striped table-hover table-bordered">
+              <thead className="thead thead-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Size</th>
+                  <th scioe="col">EO</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {eoList.map((eo, i) => (
+                  <tr key={i}>
+                    <th scope="row">{i + 1}</th>
+                    <td>{eo.getSize()}</td>
+                    <td>{eo.toString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </React.Fragment>
         )}
       </div>
     );

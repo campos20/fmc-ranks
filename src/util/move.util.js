@@ -67,7 +67,7 @@ const isValidSingleMove = (move) =>
 // Avoid U U2 or U D U2 on sequence
 export const areValidMoves = (moves) => {
   // Check for U U2
-  for (let i = 1; i < moves.legnth; i++) {
+  for (let i = 1; i < moves.length; i++) {
     if (extractFace(moves[i]) === extractFace(moves[i - 1])) {
       return false;
     }
