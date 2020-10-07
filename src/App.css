@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+h3 {
+  padding: 20px;
+  font-variant: small-caps;
+  font-weight: bold !important;
+}
+
+.help {
+  font-size: 12px !important;
+}

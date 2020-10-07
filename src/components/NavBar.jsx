@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NavBar = (props) => {
   return (
-    <Navbar bg="primary" expand="lg" variant="dark">
+    <Navbar bg="primary" expand="lg" variant="dark" className="sticky-top">
       <Link to={props.baseLink}>
         <img
           src={require("../assets/logo.svg")}
@@ -25,6 +25,9 @@ const NavBar = (props) => {
           </Link>
           <Link className="text-white m-2" to={props.scrambleImageLink}>
             Image
+          </Link>
+          <Link className="text-white m-2" to={props.eOFinderLink}>
+            EO Finder
           </Link>
           <Link className="text-white m-2" to={props.aboutLink}>
             About
