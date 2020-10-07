@@ -29,6 +29,9 @@ const NavBar = (props) => {
           <Link className="text-white m-2" to={props.aboutLink}>
             About
           </Link>
+          <Link className="text-white m-2" to={props.eOFinderLink}>
+            EO Finder
+          </Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
