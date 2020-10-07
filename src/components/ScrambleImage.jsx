@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ScrambleImagesTable from "./ScrambleImagesTable";
-import isValid from "../util/move.util";
+import { isValid } from "../util/move.util";
 
 class ScrambleImage extends Component {
   state = { content: "", validScrambles: [] };

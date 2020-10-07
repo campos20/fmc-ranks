@@ -1,15 +1,16 @@
 import React, { Component } from "react";
-import isValid from "../util/move.util";
+import { isValid } from "../util/move.util";
 
 import Cube from "../model/Cube";
+import AXIS from "../constants/axis.constants";
 
 const MAX_SOLUTION_SIZE = 7;
 
 class EOFinder extends Component {
   state = {
-    maxMoves: "5",
+    maxMoves: "4",
     scramble:
-      "R' U' F L2 F2 L2 B2 R' U2 R F2 U' L' D' B2 L B' L B' U2 R D' R' U' F",
+      "R' U' F D2 F2 L2 R2 D L2 D B2 R' F2 L2 B' L2 B D' U' L R' F' R' U' F",
   };
 
   componentDidMount() {
@@ -26,9 +27,10 @@ class EOFinder extends Component {
 
   handleClick = () => {
     let cube = new Cube();
-    console.log(cube.state);
     cube.applySequence(this.state.scramble);
-    console.log(cube.state);
+
+    let eoMovesLimit = Number(this.state.maxMoves);
+    console.log(cube.getEoList(eoMovesLimit, AXIS.UD_AXIS));
   };
 
   render() {

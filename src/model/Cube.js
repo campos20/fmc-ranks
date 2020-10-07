@@ -1,3 +1,7 @@
+import breakEoOnAxis from "../util/niss.util";
+import Niss from "./Niss";
+import { willChangeEo } from "../util/move.util";
+
 import {
   U_MOVE,
   R_MOVE,
@@ -123,7 +127,8 @@ export default class Cube {
         this.applyMoveWithDistance(L_MOVE, distance);
         break;
       }
-      case "B": {
+      default: {
+        // B
         this.applyMoveWithDistance(B_MOVE, distance);
         break;
       }
@@ -253,55 +258,48 @@ export default class Cube {
   shortToFace(c) {
     return Math.floor(c / this.FACE_SIZE);
   }
-}
 
-/*
-    public List<Niss> getEoList(int limit, AxisEnum axis) throws FmcException {
-  
-        List<Niss> eoMoves = new ArrayList<>();
-  
-        // Check if the cube is already oriented
-        if (this.isOriented(axis)) {
-            eoMoves.add(new Niss());
-        }
-  
-        for (int size = 1; size <= limit; size++) {
-  
-            // Math.pow(allowedMoves.size(), eoMovesLimit) is the total number of moves up
-            // to eoMovesLimit
-            // Using the reminder, we can get every possible move sequence
-            for (int i = 0; i < Math.pow(ALLOWED_MOVES.size(), size); i++) { // start at 1 for avoiding empty move.
-  
-                List<String> currentMoves = makeNumberIntoMoves(i, size);
-  
-                String lastMove = currentMoves.get(currentMoves.size() - 1);
-  
-                if (!MoveUtil.willChangeEo(lastMove, axis)) {
-                    continue;
-                }
-  
-                for (Niss niss : NissHelper.breakEoOnAxis(currentMoves, axis)) {
-                    Cube cube = niss.apply(this);
-                    if (cube.isOriented(axis)) {
-                        niss.setPairs(cube.pairCount());
-                        eoMoves.add(niss);
-                    }
-                }
-            }
-        }
-        return eoMoves;
+  getEoList(limit, axis) {
+    let eoMoves = [];
+
+    // Check if the cube is already oriented
+    if (this.isOriented(axis)) {
+      eoMoves.push(new Niss());
     }
-  
-    // Helps into generating every possible move sequence up to n moves
-    private static List<String> makeNumberIntoMoves(int n, int size) {
-        List<String> result = new ArrayList<>();
-        while (result.size() < size) {
-            int index = n % ALLOWED_MOVES.size();
-            result.add(0, ALLOWED_MOVES.get(index));
-  
-            n /= ALLOWED_MOVES.size();
+
+    for (let size = 1; size <= limit; size++) {
+      // Math.pow(allowedMoves.size(), eoMovesLimit) is the total number of moves up
+      // to eoMovesLimit
+      // Using the reminder, we can get every possible move sequence
+      for (let i = 0; i < Math.pow(this.ALLOWED_MOVES.length, size); i++) {
+        let currentMoves = this.makeNumberIntoMoves(i, size);
+
+        let lastMove = currentMoves[currentMoves.length - 1];
+
+        if (!willChangeEo(lastMove, axis)) {
+          continue;
         }
-        return result;
+
+        breakEoOnAxis(currentMoves, axis).forEach((niss) => {
+          let cube = niss.apply(this);
+          if (cube.isOriented(axis)) {
+            eoMoves.push(niss);
+          }
+        });
+      }
     }
+    return eoMoves;
   }
-*/
+
+  // Helps into generating every possible move sequence up to n moves
+  makeNumberIntoMoves(n, size) {
+    let result = [];
+    while (result.length < size) {
+      let index = n % this.ALLOWED_MOVES.length;
+      result.unshift(this.ALLOWED_MOVES[index]);
+
+      n = Math.floor(n / this.ALLOWED_MOVES.length);
+    }
+    return result;
+  }
+}
