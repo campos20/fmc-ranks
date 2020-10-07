@@ -1,0 +1,307 @@
+import {
+  U_MOVE,
+  R_MOVE,
+  F_MOVE,
+  D_MOVE,
+  L_MOVE,
+  B_MOVE,
+  UD_GOOD,
+  RL_GOOD,
+  FB_GOOD,
+  UD_BAD,
+  RL_BAD,
+  FB_BAD,
+  UD_FACES,
+  RL_FACES,
+  FB_FACES,
+} from "../constants/sticker.constants";
+import AXIS from "../constants/axis.constants";
+
+export default class Cube {
+  ALLOWED_MOVES = [
+    "U2",
+    "F2",
+    "R2",
+    "D2",
+    "B2",
+    "L2",
+    "U'",
+    "F'",
+    "R'",
+    "D'",
+    "B'",
+    "L'",
+    "U",
+    "F",
+    "R",
+    "D",
+    "B",
+    "L",
+  ];
+
+  uColor;
+  rColor;
+  fColor;
+  dColor;
+  lColor;
+  bColor;
+
+  oppositeColorsUD;
+  oppositeColorsRL;
+  oppositeColorsFB;
+
+  stickers = 54;
+  FACE_ORDER = "URFDLB";
+  FACE_SIZE = 9; // Each face has 9 stickers
+  FACES = 6;
+
+  // Face order: U R F D L B
+  // Each face is written using the reading order
+  state;
+
+  constructor() {
+    this.buildInitialState();
+    this.updateReferenceColors();
+  }
+
+  /*
+  constructor(state) {
+    this.state = [...state];
+    updateReferenceColors();
+  }
+
+  constructor(niss, scramble) {
+    buildInitialState();
+
+    this.applySequence(MoveUtil.invert(niss.getPreMoves()));
+    this.applySequence(scramble);
+    this.applySequence(niss.getMoves());
+    updateReferenceColors();
+  }
+*/
+
+  /**
+   * Distance = 1, regular move, distance = 2, double move, distance = -1, counter
+   * clockwise
+   *
+   */
+  applyMoveWithDistance(permutation, distance) {
+    let c = [...this.state];
+    permutation.permutations.forEach((perm) => {
+      let length = perm.length;
+      for (let i = length - 1; i >= 0; i--) {
+        this.state[perm[i]] = c[perm[(i - distance + length) % length]];
+      }
+    });
+  }
+
+  // No checks, but it's ok for now
+  applyMove = (move) => {
+    let face = move[0];
+    let modifier = move[move.length - 1];
+
+    let distance = modifier === "2" ? 2 : modifier === "'" ? -1 : 1;
+
+    switch (face) {
+      case "U": {
+        this.applyMoveWithDistance(U_MOVE, distance);
+        break;
+      }
+      case "R": {
+        this.applyMoveWithDistance(R_MOVE, distance);
+        break;
+      }
+      case "F": {
+        this.applyMoveWithDistance(F_MOVE, distance);
+        break;
+      }
+      case "D": {
+        this.applyMoveWithDistance(D_MOVE, distance);
+        break;
+      }
+      case "L": {
+        this.applyMoveWithDistance(L_MOVE, distance);
+        break;
+      }
+      case "B": {
+        this.applyMoveWithDistance(B_MOVE, distance);
+        break;
+      }
+    }
+  };
+
+  buildInitialState = () => {
+    let state = [];
+    for (let i = 0; i < this.stickers; i++) {
+      state[i] = i;
+    }
+    this.state = state;
+  };
+
+  updateReferenceColors = () => {
+    this.uColor = this.shortToFace(this.state[4]);
+    this.rColor = this.shortToFace(this.state[13]);
+    this.fColor = this.shortToFace(this.state[22]);
+    this.dColor = this.shortToFace(this.state[31]);
+    this.lColor = this.shortToFace(this.state[40]);
+    this.bColor = this.shortToFace(this.state[49]);
+
+    this.oppositeColorsUD = [this.uColor, this.dColor];
+    this.oppositeColorsRL = [this.rColor, this.lColor];
+    this.oppositeColorsFB = [this.fColor, this.bColor];
+  };
+
+  // Performs "R U R' U'"
+  applySequence(sequence) {
+    sequence.split(" ").forEach(this.applyMove);
+  }
+
+  applyMoves = (moves) => {
+    moves.forEach((move) => {
+      this.applyMove(move);
+    });
+  };
+
+  // No checks in favor of spped, but state.length == cube,length
+  applyCubeState(state) {
+    let c = [...this.state];
+    for (let i = 0; i < this.state.length; i++) {
+      this.state[i] = c[state[i]];
+    }
+  }
+
+  isOriented(axis) {
+    let goodEdges = this.getGoodEdgesIndex(axis);
+    let badEdges = this.getBadEdgesIndex(axis);
+
+    let goodColors = this.getGoodColors(axis);
+    let badColors = this.getBadColors(axis);
+
+    for (let i = 0; i < goodEdges.length; i++) {
+      for (let j = 0; j < goodEdges[i].length; j++) {
+        let color = this.shortToFace(this.state[goodEdges[i][j]]);
+        let attachedColor = this.shortToFace(this.state[badEdges[i][j]]);
+
+        if (color === badColors[0] || color === badColors[1]) {
+          return false;
+        } else if (
+          attachedColor === goodColors[0] ||
+          attachedColor === goodColors[1]
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  getGoodColors(axis) {
+    switch (axis) {
+      case AXIS.UD_AXIS:
+        return this.oppositeColorsFB;
+      case AXIS.RL_AXIS:
+        return this.oppositeColorsUD;
+      default:
+        return this.oppositeColorsUD;
+    }
+  }
+
+  getBadColors(axis) {
+    switch (axis) {
+      case AXIS.UD_AXIS:
+        return this.oppositeColorsRL;
+      case AXIS.RL_AXIS:
+        return this.oppositeColorsFB;
+      default:
+        return this.oppositeColorsRL;
+    }
+  }
+
+  getGoodEdgesIndex(axis) {
+    switch (axis) {
+      case AXIS.UD_AXIS:
+        return UD_GOOD;
+      case AXIS.RL_AXIS:
+        return RL_GOOD;
+      default:
+        return FB_GOOD;
+    }
+  }
+
+  getBadEdgesIndex(axis) {
+    switch (axis) {
+      case AXIS.UD_AXIS:
+        return UD_BAD;
+      case AXIS.RL_AXIS:
+        return RL_BAD;
+      default:
+        return FB_BAD;
+    }
+  }
+
+  getStickers(axis) {
+    switch (axis) {
+      case AXIS.UD_AXIS:
+        return UD_FACES;
+      case AXIS.RL_AXIS:
+        return RL_FACES;
+      default:
+        return FB_FACES;
+    }
+  }
+
+  shortToFace(c) {
+    return Math.floor(c / this.FACE_SIZE);
+  }
+}
+
+/*
+    public List<Niss> getEoList(int limit, AxisEnum axis) throws FmcException {
+  
+        List<Niss> eoMoves = new ArrayList<>();
+  
+        // Check if the cube is already oriented
+        if (this.isOriented(axis)) {
+            eoMoves.add(new Niss());
+        }
+  
+        for (int size = 1; size <= limit; size++) {
+  
+            // Math.pow(allowedMoves.size(), eoMovesLimit) is the total number of moves up
+            // to eoMovesLimit
+            // Using the reminder, we can get every possible move sequence
+            for (int i = 0; i < Math.pow(ALLOWED_MOVES.size(), size); i++) { // start at 1 for avoiding empty move.
+  
+                List<String> currentMoves = makeNumberIntoMoves(i, size);
+  
+                String lastMove = currentMoves.get(currentMoves.size() - 1);
+  
+                if (!MoveUtil.willChangeEo(lastMove, axis)) {
+                    continue;
+                }
+  
+                for (Niss niss : NissHelper.breakEoOnAxis(currentMoves, axis)) {
+                    Cube cube = niss.apply(this);
+                    if (cube.isOriented(axis)) {
+                        niss.setPairs(cube.pairCount());
+                        eoMoves.add(niss);
+                    }
+                }
+            }
+        }
+        return eoMoves;
+    }
+  
+    // Helps into generating every possible move sequence up to n moves
+    private static List<String> makeNumberIntoMoves(int n, int size) {
+        List<String> result = new ArrayList<>();
+        while (result.size() < size) {
+            int index = n % ALLOWED_MOVES.size();
+            result.add(0, ALLOWED_MOVES.get(index));
+  
+            n /= ALLOWED_MOVES.size();
+        }
+        return result;
+    }
+  }
+*/

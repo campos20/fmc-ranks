@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import isValid from "../util/move.util";
+
+import Cube from "../model/Cube";
+
+const MAX_SOLUTION_SIZE = 7;
 
 class EOFinder extends Component {
   state = {
@@ -6,6 +11,11 @@ class EOFinder extends Component {
     scramble:
       "R' U' F L2 F2 L2 B2 R' U2 R F2 U' L' D' B2 L B' L B' U2 R D' R' U' F",
   };
+
+  componentDidMount() {
+    this.handleClick();
+  }
+
   handleScrambleChange = (e) => {
     this.setState({ ...this.setState, scramble: e.target.value });
   };
@@ -14,9 +24,15 @@ class EOFinder extends Component {
     this.setState({ ...this.setState, maxMoves: e.target.value });
   };
 
-  handleClick = () => {};
+  handleClick = () => {
+    let cube = new Cube();
+    console.log(cube.state);
+    cube.applySequence(this.state.scramble);
+    console.log(cube.state);
+  };
 
   render() {
+    let scrambleIsValid = isValid(this.state.scramble);
     return (
       <div className="container">
         <div className="row">
@@ -32,7 +48,9 @@ class EOFinder extends Component {
               </div>
               <input
                 type="text"
-                className="form-control"
+                className={
+                  "form-control" + (!scrambleIsValid ? " bg-danger" : "")
+                }
                 required
                 value={this.state.scramble}
                 onChange={this.handleScrambleChange}
@@ -52,6 +70,7 @@ class EOFinder extends Component {
                 value={this.state.maxMoves}
                 onChange={this.handleMaxMovesChange}
                 min={1}
+                max={MAX_SOLUTION_SIZE}
               />
             </div>
             <div className="btn-group m-2" role="group">
@@ -59,6 +78,8 @@ class EOFinder extends Component {
                 type="submit"
                 className="btn btn-group btn-primary"
                 onClick={this.handleClick}
+                disabled={!scrambleIsValid}
+                title={scrambleIsValid ? "" : "Invalid scramble"}
               >
                 Find EOs
               </button>
