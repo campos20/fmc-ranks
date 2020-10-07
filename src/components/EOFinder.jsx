@@ -9,12 +9,16 @@ const MAX_SOLUTION_SIZE = 5;
 
 class EOFinder extends Component {
   state = {
-    maxMoves: "4",
-    scramble: "",
+    maxMoves: "1",
+    scramble: "R",
     eoList: [],
     eosLeft: 0,
     loaded: false,
   };
+
+  componentDidMount() {
+    this.handleSubmit();
+  }
 
   handleScrambleChange = (e) => {
     this.setState({ ...this.setState, scramble: e.target.value });

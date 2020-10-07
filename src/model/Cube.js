@@ -14,74 +14,51 @@ import {
   UD_BAD,
   RL_BAD,
   FB_BAD,
-  UD_FACES,
-  RL_FACES,
-  FB_FACES,
 } from "../constants/sticker.constants";
 import AXIS from "../constants/axis.constants";
 
 export default class Cube {
-  ALLOWED_MOVES = [
+  static ALLOWED_MOVES = [
     "U2",
-    "F2",
     "R2",
+    "F2",
     "D2",
-    "B2",
     "L2",
+    "B2",
     "U'",
-    "F'",
     "R'",
+    "F'",
     "D'",
-    "B'",
     "L'",
+    "B'",
     "U",
-    "F",
     "R",
+    "F",
     "D",
-    "B",
     "L",
+    "B",
   ];
 
-  uColor;
-  rColor;
-  fColor;
-  dColor;
-  lColor;
-  bColor;
+  static uColor = 0;
+  static rColor = 1;
+  static fColor = 2;
+  static dColor = 3;
+  static lColor = 4;
+  static bColor = 5;
 
-  oppositeColorsUD;
-  oppositeColorsRL;
-  oppositeColorsFB;
+  static oppositeColorsUD = [Cube.uColor, Cube.dColor];
+  static oppositeColorsRL = [Cube.rColor, Cube.lColor];
+  static oppositeColorsFB = [Cube.fColor, Cube.bColor];
 
-  stickers = 54;
-  FACE_ORDER = "URFDLB";
-  FACE_SIZE = 9; // Each face has 9 stickers
-  FACES = 6;
+  static FACE_ORDER = "URFDLB";
+  static FACE_SIZE = 9; // Each face has 9 stickers
+  static FACES = 6;
+  static STICKERS = Cube.FACE_SIZE * Cube.FACES;
 
   // Face order: U R F D L B
   // Each face is written using the reading order
-  state;
-
-  constructor() {
-    this.buildInitialState();
-    this.updateReferenceColors();
-  }
-
-  /*
-  constructor(state) {
-    this.state = [...state];
-    updateReferenceColors();
-  }
-
-  constructor(niss, scramble) {
-    buildInitialState();
-
-    this.applySequence(MoveUtil.invert(niss.getPreMoves()));
-    this.applySequence(scramble);
-    this.applySequence(niss.getMoves());
-    updateReferenceColors();
-  }
-*/
+  // state = [0, ..., 53]
+  state = Array.from(Array(Cube.STICKERS).keys());
 
   /**
    * Distance = 1, regular move, distance = 2, double move, distance = -1, counter
@@ -134,39 +111,20 @@ export default class Cube {
     }
   };
 
-  buildInitialState = () => {
-    let state = [];
-    for (let i = 0; i < this.stickers; i++) {
-      state[i] = i;
-    }
-    this.state = state;
-  };
-
-  updateReferenceColors = () => {
-    this.uColor = this.shortToFace(this.state[4]);
-    this.rColor = this.shortToFace(this.state[13]);
-    this.fColor = this.shortToFace(this.state[22]);
-    this.dColor = this.shortToFace(this.state[31]);
-    this.lColor = this.shortToFace(this.state[40]);
-    this.bColor = this.shortToFace(this.state[49]);
-
-    this.oppositeColorsUD = [this.uColor, this.dColor];
-    this.oppositeColorsRL = [this.rColor, this.lColor];
-    this.oppositeColorsFB = [this.fColor, this.bColor];
-  };
-
   // Performs "R U R' U'"
   applySequence(sequence) {
     sequence.split(" ").forEach(this.applyMove);
   }
 
+  // Performs "[R, U, R', U']"
   applyMoves = (moves) => {
     moves.forEach((move) => {
       this.applyMove(move);
     });
   };
 
-  // No checks in favor of spped, but state.length == cube,length
+  // No checks in favor of spped, but state.length === cube,length
+  // Apply a cube state into another cube
   applyCubeState(state) {
     let c = [...this.state];
     for (let i = 0; i < this.state.length; i++) {
@@ -175,16 +133,16 @@ export default class Cube {
   }
 
   isOriented(axis) {
-    let goodEdges = this.getGoodEdgesIndex(axis);
-    let badEdges = this.getBadEdgesIndex(axis);
+    let goodEdges = Cube.getGoodEdgesIndex(axis);
+    let badEdges = Cube.getBadEdgesIndex(axis);
 
-    let goodColors = this.getGoodColors(axis);
-    let badColors = this.getBadColors(axis);
+    let goodColors = Cube.getGoodColors(axis);
+    let badColors = Cube.getBadColors(axis);
 
     for (let i = 0; i < goodEdges.length; i++) {
       for (let j = 0; j < goodEdges[i].length; j++) {
-        let color = this.shortToFace(this.state[goodEdges[i][j]]);
-        let attachedColor = this.shortToFace(this.state[badEdges[i][j]]);
+        let color = Cube.shortToFace(this.state[goodEdges[i][j]]);
+        let attachedColor = Cube.shortToFace(this.state[badEdges[i][j]]);
 
         if (color === badColors[0] || color === badColors[1]) {
           return false;
@@ -199,29 +157,29 @@ export default class Cube {
     return true;
   }
 
-  getGoodColors(axis) {
+  static getGoodColors(axis) {
     switch (axis) {
       case AXIS.UD_AXIS:
-        return this.oppositeColorsFB;
+        return Cube.oppositeColorsFB;
       case AXIS.RL_AXIS:
-        return this.oppositeColorsUD;
+        return Cube.oppositeColorsUD;
       default:
-        return this.oppositeColorsUD;
+        return Cube.oppositeColorsUD;
     }
   }
 
-  getBadColors(axis) {
+  static getBadColors(axis) {
     switch (axis) {
       case AXIS.UD_AXIS:
-        return this.oppositeColorsRL;
+        return Cube.oppositeColorsRL;
       case AXIS.RL_AXIS:
-        return this.oppositeColorsFB;
+        return Cube.oppositeColorsFB;
       default:
-        return this.oppositeColorsRL;
+        return Cube.oppositeColorsRL;
     }
   }
 
-  getGoodEdgesIndex(axis) {
+  static getGoodEdgesIndex(axis) {
     switch (axis) {
       case AXIS.UD_AXIS:
         return UD_GOOD;
@@ -232,7 +190,7 @@ export default class Cube {
     }
   }
 
-  getBadEdgesIndex(axis) {
+  static getBadEdgesIndex(axis) {
     switch (axis) {
       case AXIS.UD_AXIS:
         return UD_BAD;
@@ -243,18 +201,9 @@ export default class Cube {
     }
   }
 
-  getStickers(axis) {
-    switch (axis) {
-      case AXIS.UD_AXIS:
-        return UD_FACES;
-      case AXIS.RL_AXIS:
-        return RL_FACES;
-      default:
-        return FB_FACES;
-    }
-  }
-
-  shortToFace(c) {
+  // Faces are 012...8
+  // Each face 0 has stickers 0-8, face 1 has 9-17. We convert this number to its face
+  static shortToFace(c) {
     return Math.floor(c / this.FACE_SIZE);
   }
 
@@ -262,8 +211,8 @@ export default class Cube {
     let eoMoves = [];
 
     // Using the reminder, we can get every possible move sequence
-    for (let i = 0; i < Math.pow(this.ALLOWED_MOVES.length, size); i++) {
-      let currentMoves = this.makeNumberIntoMoves(i, size);
+    for (let i = 0; i < Math.pow(Cube.ALLOWED_MOVES.length, size); i++) {
+      let currentMoves = Cube.makeNumberIntoMoves(i, size);
 
       let lastMove = currentMoves[currentMoves.length - 1];
 
@@ -282,7 +231,7 @@ export default class Cube {
   }
 
   // Helps into generating every possible move sequence up to n moves
-  makeNumberIntoMoves(n, size) {
+  static makeNumberIntoMoves(n, size) {
     let result = [];
     while (result.length < size) {
       let index = n % this.ALLOWED_MOVES.length;
