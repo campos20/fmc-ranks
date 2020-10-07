@@ -4,8 +4,8 @@ import { invert } from "../util/move.util";
 
 export default class Niss {
   constructor(preMoves, moves) {
-    this.preMoves = preMoves || [];
-    this.moves = moves || [];
+    this.preMoves = preMoves;
+    this.moves = moves;
   }
 
   apply(cube) {

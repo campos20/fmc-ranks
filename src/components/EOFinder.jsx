@@ -1,24 +1,20 @@
 import React, { Component } from "react";
-import { isValid } from "../util/move.util";
+import { isValidFaceMoves } from "../util/move.util";
 
 import Cube from "../model/Cube";
 import AXIS from "../constants/axis.constants";
 import Loading from "./Loading";
 
-const MAX_SOLUTION_SIZE = 5;
+const MAX_SOLUTION_SIZE = 6;
 
 class EOFinder extends Component {
   state = {
-    maxMoves: "1",
-    scramble: "R",
+    maxMoves: "4",
+    scramble: "",
     eoList: [],
     eosLeft: 0,
     loaded: false,
   };
-
-  componentDidMount() {
-    this.handleSubmit();
-  }
 
   handleScrambleChange = (e) => {
     this.setState({ ...this.setState, scramble: e.target.value });
@@ -43,7 +39,8 @@ class EOFinder extends Component {
     });
 
     let cube = new Cube();
-    cube.applySequence(this.state.scramble);
+    let scramble = this.state.scramble.trim();
+    cube.applySequence(scramble);
 
     // TODO handle cube already oriented
     // We could check if cube.isOriented(axis) and display a F0 or something.
@@ -65,7 +62,7 @@ class EOFinder extends Component {
   };
 
   render() {
-    let scrambleIsValid = isValid(this.state.scramble);
+    let scrambleIsValid = isValidFaceMoves(this.state.scramble);
     let eoList = this.state.eoList;
     let eosFound = eoList.length;
 
@@ -113,7 +110,12 @@ class EOFinder extends Component {
               />
             </div>
             <div className="btn-group m-2" role="group">
-              <button type="submit" className="btn btn-group btn-primary">
+              <button
+                type="submit"
+                className="btn btn-group btn-primary"
+                disabled={!scrambleIsValid}
+                title={!scrambleIsValid ? "Invalid scramble" : ""}
+              >
                 Find EOs
               </button>
             </div>

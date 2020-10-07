@@ -21,11 +21,41 @@ const allowedModifiers = "'2";
 const allowedSlices = "MSE";
 const allowedRotations = "xyz";
 
-const isValidMove = (move) => {
+const isValidGeneralMove = (move) => {
   if (!move) {
     return false;
   }
+
   if (move.length === 0 || move.length > 3) {
+    return false;
+  }
+};
+
+const isFaceMove = (move) => {
+  if (move.length === 1) {
+    return allowedMoves.indexOf(move) >= 0;
+  }
+
+  if (move.length === 2) {
+    return (
+      allowedMoves.indexOf(move[0]) >= 0 &&
+      allowedModifiers.indexOf(move[1]) >= 0
+    );
+  }
+
+  return false;
+};
+
+export const isValidFaceMoves = (sequence) => {
+  return sequence
+    .trim()
+    .split(" ")
+    .map(isFaceMove)
+    .reduce((a, b) => a && b, true);
+};
+
+const isValidMove = (move) => {
+  if (!isValidGeneralMove(move)) {
     return false;
   }
 
