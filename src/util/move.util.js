@@ -29,6 +29,8 @@ const isValidGeneralMove = (move) => {
   if (move.length === 0 || move.length > 3) {
     return false;
   }
+
+  return true;
 };
 
 const isFaceMove = (move) => {
