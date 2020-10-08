@@ -1,4 +1,4 @@
-import isValid from "./move.util";
+import { isValid, isValidFaceMoves } from "./move.util";
 
 test("Checks if valid moves are computed correctly", () => {
   expect(isValid("U R F B L D U' R' F' B' L' D' U2 R2 F2 B2 L2 D2")).toBe(true);
@@ -11,4 +11,7 @@ test("Checks if valid moves are computed correctly", () => {
   expect(isValid("X")).toBe(false);
   expect(isValid("invalid")).toBe(false);
   expect(isValid("URF")).toBe(false);
+
+  expect(isValidFaceMoves("R' U' F L2")).toBe(true);
+  expect(isValidFaceMoves("R' U' Fw L2")).toBe(false);
 });
