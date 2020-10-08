@@ -118,7 +118,7 @@ export const areValidMoves = (moves) => {
   return true;
 };
 
-const areParallel = (move1, move2) => {
+export const areParallel = (move1, move2) => {
   let face1 = extractFace(move1);
   let face2 = extractFace(move2);
 

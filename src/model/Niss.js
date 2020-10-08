@@ -1,6 +1,6 @@
 import Cube from "./Cube";
 import { areValidMoves } from "../util/move.util";
-import { invert } from "../util/move.util";
+import { invert, areParallel } from "../util/move.util";
 
 export default class Niss {
   constructor(preMoves, moves) {
@@ -29,7 +29,36 @@ export default class Niss {
   }
 
   isValid() {
-    return areValidMoves(this.moves) && areValidMoves(this.preMoves);
+    if (!areValidMoves(this.moves)) {
+      return false;
+    }
+
+    if (!areValidMoves(this.preMoves)) {
+      return false;
+    }
+
+    // Since this is used just for EO checking, we exclude B2 F
+    if (
+      this.moves.length > 1 &&
+      areParallel(
+        this.moves[this.moves.length - 1],
+        this.moves[this.moves.length - 2]
+      )
+    ) {
+      return false;
+    }
+
+    if (
+      this.preMoves.length > 1 &&
+      areParallel(
+        this.preMoves[this.preMoves.length - 1],
+        this.preMoves[this.preMoves.length - 2]
+      )
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   getSize() {
