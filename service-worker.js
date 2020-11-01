@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/fmc-ranks/precache-manifest.f7a263b7a22f8c7906128f09c662fd58.js"
+  "/fmc-ranks/precache-manifest.957935835d34c8bc1a563bdc483944f7.js"
 );
 
 self.addEventListener('message', (event) => {
