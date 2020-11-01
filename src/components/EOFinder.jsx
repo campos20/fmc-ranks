@@ -24,7 +24,9 @@ class EOFinder extends Component {
     this.setState({ ...this.setState, maxMoves: e.target.value });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (evt) => {
+    evt.preventDefault();
+
     let keys = Object.keys(AXIS);
 
     let eoMovesLimit = Number(this.state.maxMoves);
