@@ -30,4 +30,4 @@ The app is built with [Vite](https://vite.dev/), React and TypeScript.
 
 ## Deploy
 
-Every push to `master` is built and deployed to GitHub Pages by [GitHub Actions](.github/workflows/deploy.yml). Pull requests run lint, tests and build only.
+Every push to `main` is built and deployed to GitHub Pages by [GitHub Actions](.github/workflows/deploy.yml). Pull requests run lint, tests and build only.
