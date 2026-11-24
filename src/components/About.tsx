@@ -1,5 +1,3 @@
-import React from "react";
-
 const About = () => (
   <div className="container">
     <div className="row">
@@ -8,7 +6,7 @@ const About = () => (
       </div>
     </div>
 
-    <div className="text-justify">
+    <div className="text-start">
       <p>
         This project is open source and you can contribute{" "}
         <a href="https://github.com/campos20/fmc-ranks/">here</a>.
@@ -21,4 +19,5 @@ const About = () => (
     </div>
   </div>
 );
+
 export default About;

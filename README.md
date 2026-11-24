@@ -6,15 +6,22 @@ You can check a live version of this repo [here](https://campos20.github.io/fmc-
 
 ## Getting Started
 
-To develop,
+Requires Node 24 (see `.nvmrc`).
 
 - Clone this project with `git clone https://github.com/campos20/fmc-ranks.git`
 - Navigate to it with `cd fmc-ranks`
 - Run `npm install` to install dependencies
-- Run `npm start` and open the browser in the specified address.
+- Run `npm run dev` and open the browser in the specified address.
 
-## How this work
+Other scripts:
 
-Since this project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), all the common tasks also work.
+- `npm run build`: type-check and build into `dist/`
+- `npm run preview`: serve the production build locally
+- `npm run lint`: run ESLint
+- `npm test`: run tests with Vitest
+
+## How this works
+
+The app is built with [Vite](https://vite.dev/), React and TypeScript.
 
 - Scrambles are fetched from the live version of [Scramble Web API](https://github.com/campos20/scramble-web-api), scramble images use [Scramble Display](https://github.com/cubing/scramble-display).

@@ -1,7 +1,7 @@
 // TODO find a better way to validate scrambles
 // I'm sure I'm not the first who needs it
 
-export const isValid = (scramble) => {
+export const isValid = (scramble: string): boolean => {
   return scramble
     .trim()
     .split(" ")
@@ -14,7 +14,7 @@ const allowedModifiers = "'2";
 const allowedSlices = "MSE";
 const allowedRotations = "xyz";
 
-const isValidGeneralMove = (move) => {
+const isValidGeneralMove = (move: string): boolean => {
   if (!move) {
     return false;
   }
@@ -26,7 +26,7 @@ const isValidGeneralMove = (move) => {
   return true;
 };
 
-const isValidMove = (move) => {
+const isValidMove = (move: string): boolean => {
   if (!isValidGeneralMove(move)) {
     return false;
   }
@@ -60,8 +60,8 @@ const isValidMove = (move) => {
   return true;
 };
 
-// moved.length === 1
-const isValidSingleMove = (move) =>
+// move.length === 1
+const isValidSingleMove = (move: string): boolean =>
   allowedMoves.includes(move) ||
   allowedRotations.includes(move) ||
   allowedSlices.includes(move);

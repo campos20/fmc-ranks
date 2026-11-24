@@ -1,3 +1,4 @@
+import { expect, test } from "vitest";
 import { isValid } from "./move.util";
 
 test("Checks if valid moves are computed correctly", () => {
