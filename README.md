@@ -1,6 +1,6 @@
 # FMC Ranks
 
-App for generating rank and scrambles for Fewest Moves, an official [WCA](https://www.worldcubeassociation.org/) event.
+App for generating and displaying scrambles for Fewest Moves, an official [WCA](https://www.worldcubeassociation.org/) event.
 
 You can check a live version of this repo [here](https://campos20.github.io/fmc-ranks/).
 

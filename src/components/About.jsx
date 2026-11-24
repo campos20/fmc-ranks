@@ -14,8 +14,9 @@ const About = () => (
         <a href="https://github.com/campos20/fmc-ranks/">here</a>.
       </p>
       <p>
-        At first, this was created to generate FMC ranks only, then it slowly
-        became a multi-purpose FMC project
+        At first, this was created to generate FMC ranks, then it slowly
+        became a multi-purpose FMC project. Today it focuses on generating FMC
+        scrambles and displaying them like in a competition.
       </p>
     </div>
   </div>

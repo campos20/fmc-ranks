@@ -17,17 +17,11 @@ const NavBar = (props) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Link className="text-white m-2" to={props.rankLink}>
-            Rank
-          </Link>
           <Link className="text-white m-2" to={props.scrambleLink}>
             Scramble
           </Link>
           <Link className="text-white m-2" to={props.scrambleImageLink}>
             Image
-          </Link>
-          <Link className="text-white m-2" to={props.eOFinderLink}>
-            EO Finder
           </Link>
           <Link className="text-white m-2" to={props.aboutLink}>
             About
