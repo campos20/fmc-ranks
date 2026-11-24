@@ -7,3 +7,9 @@ h3 {
   font-variant: small-caps;
   font-weight: bold !important;
 }
+
+/* Pure white nav links (Bootstrap 5 dims them on dark navbars) */
+.navbar.navbar-dark {
+  --bs-navbar-color: #fff;
+  --bs-navbar-hover-color: #fff;
+}
