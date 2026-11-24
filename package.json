@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.9",
+    "cubing": "^0.66.1",
     "react": "^19.3.1",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.3.1",

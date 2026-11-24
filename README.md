@@ -24,4 +24,6 @@ Other scripts:
 
 The app is built with [Vite](https://vite.dev/), React and TypeScript.
 
-- Scrambles are fetched from the live version of [Scramble Web API](https://github.com/campos20/scramble-web-api), scramble images use [Scramble Display](https://github.com/cubing/scramble-display).
+- Scrambles are generated in the browser with [cubing.js](https://github.com/cubing/cubing.js) (random-state FMC scrambles, in a web worker). No backend is needed.
+- Scramble images use [Scramble Display](https://github.com/cubing/scramble-display), which is also built on cubing.js.
+- `vite.config.ts` has a small plugin so Vite bundles the cubing.js scramble worker correctly.
